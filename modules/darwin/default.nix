@@ -1,10 +1,6 @@
 { pkgs, lib, inputs, outputs, ... }:
 
 {
-  imports = [
-    ../modules
-  ];
-
   nixpkgs = {
     overlays = [
       outputs.overlays.additions

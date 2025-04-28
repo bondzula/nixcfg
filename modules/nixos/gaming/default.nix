@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.modules.gaming.enable = lib.mkEnableOption "enable gaming module";
+  options.nixosModules.gaming.enable = lib.mkEnableOption "enable gaming module";
 
-  config = lib.mkIf config.modules.gaming.enable {
+  config = lib.mkIf config.nixosModules.gaming.enable {
     hardware.graphics = {
       enable = true;
       enable32Bit = true;

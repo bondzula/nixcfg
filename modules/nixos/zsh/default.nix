@@ -1,9 +1,9 @@
 { lib, config, pkgs, ... }:
 
 {
-  options.osModules.zsh.enable = lib.mkEnableOption "Enable ZSH";
+  options.nixosModules.zsh.enable = lib.mkEnableOption "Enable ZSH";
 
-  config = lib.mkIf config.osModules.zsh.enable {
+  config = lib.mkIf config.nixosModules.zsh.enable {
     # Enables the zsh shell
     programs.zsh.enable = true;
 

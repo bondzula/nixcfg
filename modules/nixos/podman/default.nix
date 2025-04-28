@@ -1,9 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  options.modules.podman.enable = lib.mkEnableOption "enable podman";
+  options.nixosModules.podman.enable = lib.mkEnableOption "enable podman";
 
-  config = lib.mkIf config.modules.podman.enable {
+  config = lib.mkIf config.nixosModules.podman.enable {
     virtualisation = {
       podman = {
         enable = true;

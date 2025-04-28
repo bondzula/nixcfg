@@ -1,7 +1,0 @@
-{
-  imports = [
-    ./gaming
-    ./podman
-    ./zsh
-  ];
-}

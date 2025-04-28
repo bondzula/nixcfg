@@ -29,7 +29,7 @@
     };
   };
 
-  outputs = { self, dotfiles, home-manager, nixpkgs, ... }@inputs:
+  outputs = { self, dotfiles, nix-darwin, nix-homebrew, home-manager, nixpkgs, ... }@inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -41,38 +41,37 @@
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
     in {
-      packages =
-        forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+      packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
         jakku = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/hosts/jakku
+            ./hosts/jakku
           ];
         };
 
         endor = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/hosts/endor
+            ./hosts/endor
           ];
         };
 
         vernius = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/hosts/vernius
+            ./hosts/vernius
           ];
         };
       };
 
-      darwinConfiguration = {
-        oslo = nixpkgs.lib.nixosSystem {
+      darwinConfigurations = {
+        oslo = nix-darwin.lib.darwinSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./nixos/hosts/oslo
+            ./hosts/oslo
           ];
         };
       };
@@ -82,7 +81,7 @@
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            ./home/hosts/jakku/bondzula.nix
+            ./hosts/jakku/home.nix
           ];
         };
 
@@ -90,7 +89,15 @@
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
-            ./home/hosts/endor/bondzula.nix
+            ./hosts/endor/home.nix
+          ];
+        };
+
+        "stefan@oslo" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/oslo/home.nix
           ];
         };
       };
