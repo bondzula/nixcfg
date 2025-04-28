@@ -49,11 +49,6 @@
         # Go
         go
 
-        # Nix
-        deadnix
-        nixfmt-rfc-style
-        statix
-
         hadolint
         commitlint
         dotenv-linter
