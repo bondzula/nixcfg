@@ -1,4 +1,9 @@
-{ pkgs, inputs, outputs, ... }:
+{
+  pkgs,
+  inputs,
+  outputs,
+  ...
+}:
 
 {
   imports = [
@@ -55,6 +60,5 @@
       programs.home-manager.enable = true;
     };
   };
-
 
 }

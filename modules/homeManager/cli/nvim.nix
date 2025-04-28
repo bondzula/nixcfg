@@ -1,4 +1,10 @@
-{ pkgs, config, lib, inputs, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   options.homeModules.cli.neovim.enable = lib.mkEnableOption "enable neovim";
@@ -65,7 +71,7 @@
       EDITOR = "${pkgs.neovim}/bin/nvim";
       VISUAL = "${pkgs.neovim}/bin/nvim";
       SUDO_EDITOR = "${pkgs.neovim}/bin/nvim";
-      MANPAGER="nvim +Man!";
+      MANPAGER = "nvim +Man!";
     };
   };
 }

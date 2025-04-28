@@ -29,7 +29,16 @@
     };
   };
 
-  outputs = { self, dotfiles, nix-darwin, nix-homebrew, home-manager, nixpkgs, ... }@inputs:
+  outputs =
+    {
+      self,
+      dotfiles,
+      nix-darwin,
+      nix-homebrew,
+      home-manager,
+      nixpkgs,
+      ...
+    }@inputs:
     let
       inherit (self) outputs;
       systems = [
@@ -40,7 +49,8 @@
         "x86_64-darwin"
       ];
       forAllSystems = nixpkgs.lib.genAttrs systems;
-    in {
+    in
+    {
       packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
       overlays = import ./overlays { inherit inputs; };
 

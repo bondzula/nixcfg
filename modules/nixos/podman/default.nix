@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.nixosModules.podman.enable = lib.mkEnableOption "enable podman";
@@ -24,5 +29,3 @@
     ];
   };
 }
-
-

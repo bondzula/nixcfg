@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 
 {
   imports = [
@@ -59,8 +64,8 @@
 
   # Scanning (Brother’s brscan4 backend)
   hardware.sane = {
-    enable = true;            # turn on SANE globally
-    brscan4.enable = true;    # DCP-1510 uses the brscan4 backend
+    enable = true; # turn on SANE globally
+    brscan4.enable = true; # DCP-1510 uses the brscan4 backend
   };
 
   # Enable sound with pipewire.
@@ -78,7 +83,7 @@
 
   # List packages installed in system profile. To search, run:
   # $ nix search wget
-  environment.systemPackages = with pkgs; [];
+  environment.systemPackages = with pkgs; [ ];
 
   # List services that you want to enable:
   nixosModules = {
@@ -102,7 +107,12 @@
 
   # Performance Improvments
   boot.kernelPackages = pkgs.linuxPackages_zen;
-  boot.kernelParams   = [ "mitigations=off" "nowatchdog" "audit=0" "intel_pstate=active" ];
+  boot.kernelParams = [
+    "mitigations=off"
+    "nowatchdog"
+    "audit=0"
+    "intel_pstate=active"
+  ];
 
   # Ensure nouveau never grabs the card before the proprietary driver
   boot.blacklistedKernelModules = [ "nouveau" ];
@@ -111,7 +121,10 @@
   hardware.cpu.intel.updateMicrocode = true;
 
   # Hybrid-GPU (Intel UHD 620 + GeForce MX130)
-  services.xserver.videoDrivers = [ "nvidia" "modesetting" ];
+  services.xserver.videoDrivers = [
+    "nvidia"
+    "modesetting"
+  ];
 
   hardware.nvidia = {
     open = true;
@@ -121,7 +134,7 @@
     prime = {
       # “Offload” keeps battery usage low: Intel does 2-D; NV dGPU
       # wakes only when you run `nvidia-offload <app>`.
-      offload.enable= true;
+      offload.enable = true;
       # run `lspci | grep -E "VGA|3D"` to verify
       intelBusId = "PCI:00:02:0";
       nvidiaBusId = "PCI:01:00:0";

@@ -41,17 +41,17 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      intel-media-driver     # iHD: mandatory for Arc
-      intel-compute-runtime  # OpenCL: HDR tone-mapping & subtitles
-      vpl-gpu-rt             # QSV on 11th gen or newer
-      intel-ocl              # OpenCL support
+      intel-media-driver # iHD: mandatory for Arc
+      intel-compute-runtime # OpenCL: HDR tone-mapping & subtitles
+      vpl-gpu-rt # QSV on 11th gen or newer
+      intel-ocl # OpenCL support
     ];
   };
 
   ## environment tweaks
   environment.sessionVariables = {
-    LIBVA_DRIVER_NAME   = "iHD";
-    LIBVA_DRIVERS_PATH  = "${pkgs.intel-media-driver}/lib/dri";
+    LIBVA_DRIVER_NAME = "iHD";
+    LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
   };
 
   # Set your time zone.
@@ -76,7 +76,9 @@
       ];
     };
 
-    groups.bondzula  = { gid = 1000;  };
+    groups.bondzula = {
+      gid = 1000;
+    };
   };
 
   # List packages installed in system profile. To search, run:

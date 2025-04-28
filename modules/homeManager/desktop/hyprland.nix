@@ -54,18 +54,18 @@
           inactive_opacity = 0.5;
 
           shadow = {
-            enabled       = true;              # was drop_shadow
-            range         = 60;                # was shadow_range
-            offset        = "1 2";             # was shadow_offset
-            render_power  = 3;                 # was shadow_render_power
-            scale         = 0.97;              # was shadow_scale
-            color         = "rgba(1E202966)";  # replaces col.shadow
+            enabled = true; # was drop_shadow
+            range = 60; # was shadow_range
+            offset = "1 2"; # was shadow_offset
+            render_power = 3; # was shadow_render_power
+            scale = 0.97; # was shadow_scale
+            color = "rgba(1E202966)"; # replaces col.shadow
           };
 
           blur = {
             enabled = true;
-            size    = 3;
-            passes  = 3;
+            size = 3;
+            passes = 3;
           };
         };
 
@@ -87,7 +87,7 @@
           preserve_split = true;
         };
 
-        master = {};
+        master = { };
 
         gestures = {
           workspace_swipe = false;
@@ -189,4 +189,3 @@
     };
   };
 }
-

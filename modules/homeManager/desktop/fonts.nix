@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeModules.desktop.fonts.enable =
@@ -11,4 +16,3 @@
     ];
   };
 }
-

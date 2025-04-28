@@ -1,8 +1,12 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
-  options.homeModules.desktop.wayland.enable =
-    lib.mkEnableOption "wayland extra tools and config";
+  options.homeModules.desktop.wayland.enable = lib.mkEnableOption "wayland extra tools and config";
 
   config = lib.mkIf config.homeModules.desktop.wayland.enable {
     programs.waybar = {
@@ -177,8 +181,12 @@
           passthrough = false;
           gtk-layer-shell = true;
           height = 0;
-          modules-left = ["clock" "custom/weather" "hyprland/workspaces"];
-          modules-center = ["hyprland/window"];
+          modules-left = [
+            "clock"
+            "custom/weather"
+            "hyprland/workspaces"
+          ];
+          modules-center = [ "hyprland/window" ];
           modules-right = [
             "tray"
           ];
@@ -204,10 +212,10 @@
               "7" = "";
             };
             persistent_workspaces = {
-              "1" = [];
-              "2" = [];
-              "3" = [];
-              "4" = [];
+              "1" = [ ];
+              "2" = [ ];
+              "3" = [ ];
+              "4" = [ ];
             };
           };
           "custom/weather" = {
@@ -244,4 +252,3 @@
     ];
   };
 }
-

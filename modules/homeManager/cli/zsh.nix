@@ -1,4 +1,10 @@
-{ pkgs, config, lib, inputs, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 {
   options.homeModules.cli.zsh.enable = lib.mkEnableOption "enable extended zsh configuration";
@@ -78,4 +84,3 @@
     };
   };
 }
-

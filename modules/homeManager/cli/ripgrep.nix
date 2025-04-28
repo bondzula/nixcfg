@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 {
   options.homeModules.cli.ripgrep.enable = lib.mkEnableOption "enable ripgrep";
@@ -12,7 +17,6 @@
       sessionVariables = {
         RIPGREP_CONFIG_PATH = "${config.xdg.configHome}/ripgrep/config";
       };
-
 
       # ripgrep ignores anything matching this
       file.".ignore".text = ''
