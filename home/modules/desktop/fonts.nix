@@ -6,7 +6,6 @@
 
   config = lib.mkIf config.homeModules.desktop.fonts.enable {
     home.packages = with pkgs; [
-      font-manager
       nerd-fonts.jetbrains-mono
       nerd-fonts.fira-code
     ];
