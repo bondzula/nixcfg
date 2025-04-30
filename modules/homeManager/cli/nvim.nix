@@ -52,9 +52,6 @@
         cargo
         rustc
 
-        # Go
-        go
-
         hadolint
         commitlint
         dotenv-linter

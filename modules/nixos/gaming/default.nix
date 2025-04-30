@@ -9,11 +9,6 @@
   options.nixosModules.gaming.enable = lib.mkEnableOption "enable gaming module";
 
   config = lib.mkIf config.nixosModules.gaming.enable {
-    hardware.graphics = {
-      enable = true;
-      enable32Bit = true;
-    };
-
     hardware.openrazer = {
       enable = true;
       users = [ "bondzula" ];

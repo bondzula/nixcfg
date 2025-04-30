@@ -17,6 +17,9 @@
   # Enable networking
   networking.networkmanager.enable = true;
 
+  hardware.bluetooth.enable = true; # enables support for Bluetooth
+  hardware.bluetooth.powerOnBoot = true; # powers up the default Bluetooth controller on boot
+
   # Set your time zone.
   time.timeZone = "Europe/Belgrade";
 
@@ -80,6 +83,8 @@
 
   # List services that you want to enable:
   nixosModules = {
+    hardware.has.amd.gpu = true;
+
     zsh.enable = true;
     gaming.enable = true;
     podman.enable = true;
