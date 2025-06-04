@@ -25,7 +25,6 @@
       "ghostty"
       "obs"
       "obsidian"
-      "skype"
       "zen-browser"
     ];
 
