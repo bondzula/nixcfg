@@ -55,13 +55,15 @@
         hadolint
         commitlint
         dotenv-linter
+
+        eslint
       ];
     };
 
-    home.file.".config/nvim" = {
-      source = "${inputs.dotfiles}/nvim";
-      recursive = true;
-    };
+    # home.file.".config/nvim" = {
+    #   source = "${inputs.dotfiles}/nvim";
+    #   recursive = true;
+    # };
 
     # Set default editor to be nvim
     home.sessionVariables = {

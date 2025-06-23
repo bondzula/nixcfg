@@ -29,12 +29,22 @@
     ];
   };
 
+  system.primaryUser = "stefan";
+
   environment = {
     systemPath = [
       "/opt/homebrew/bin"
     ];
 
-    systemPackages = with pkgs; [ ];
+    systemPackages = with pkgs; [
+      bun
+      devenv
+      eslint
+
+      awscli2
+      ssm-session-manager-plugin
+      terraform
+    ];
   };
 
   system.defaults = {
@@ -42,7 +52,7 @@
       autohide = true;
       show-recents = false;
       persistent-apps = [
-        "/Applications/Zen Browser.app"
+        "/Applications/Zen.app"
         "/Applications/Ghostty.app"
         "/Applications/Obsidian.app"
         "/Applications/TickTick.app"

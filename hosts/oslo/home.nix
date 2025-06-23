@@ -24,15 +24,8 @@
         homeDirectory = "/Users/stefan";
 
         packages = with pkgs; [
-          appcleaner
-          discord
           exercism
-          firefox
-          google-chrome
-          monitorcontrol
-          raycast
-          vscode
-          zed-editor
+          lazygit
 
           # go-blueprint
           # awscli2

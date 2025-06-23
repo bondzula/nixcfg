@@ -24,6 +24,7 @@
       trusted-users = [
         "root"
         "bondzula"
+        "stefan"
       ];
     };
     gc = {
