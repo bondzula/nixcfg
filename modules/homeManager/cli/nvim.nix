@@ -26,27 +26,10 @@
         # pngpaste # Used for img-clip plugin
 
         # Build tools
-        pkg-config
-        gcc
-        cmake
-        gnumake
-        ninja
 
         unzip
         wget
         tree-sitter
-
-        # Node
-        nodejs
-        nodePackages.npm
-
-        # Lua
-        lua51Packages.lua
-        lua51Packages.luarocks
-
-        # PHP
-        php82
-        php82Packages.composer
 
         # Rust
         cargo
@@ -56,7 +39,21 @@
         commitlint
         dotenv-linter
 
-        eslint
+        # Language Servers
+        zls # Zig
+        nixd # Nix
+        gopls # Go
+        pyright # Python
+        intelephense # PHP
+        terraform-ls # Terraform
+        lua-language-server # Lua
+        vue-language-server # Vue
+        bash-language-server # Bash
+        cmake-language-server # Cmake
+        typescript-language-server # JS/TS
+        tailwindcss-language-server # Tailwind
+        vscode-langservers-extracted # HTML/CSS/JSON
+        dockerfile-language-server-nodejs # Dockerfile
       ];
     };
 
