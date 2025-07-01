@@ -29,7 +29,6 @@
       "betterdisplay"
       "cleanshot"
       "discord"
-      "docker"
       "firefox"
       "ghostty"
       "google-chrome"
