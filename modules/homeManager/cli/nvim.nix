@@ -53,6 +53,7 @@
           tailwindcss-language-server # Tailwind
           vscode-langservers-extracted # HTML/CSS/JSON
           dockerfile-language-server-nodejs # Dockerfile
+          harper # Spell checking
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
           pngpaste # Used for img-clip plugin (macOS only)
