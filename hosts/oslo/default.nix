@@ -13,7 +13,7 @@
   # Machine Name
   networking.hostName = "oslo";
 
-  # Set your time zone.
+  # Set your timezone.
   time.timeZone = "Europe/Belgrade";
 
   # User setup
@@ -36,62 +36,7 @@
       "/opt/homebrew/bin"
     ];
 
-    systemPackages = with pkgs; [
-      # devenv
-
-      awscli2
-      ssm-session-manager-plugin
-
-      # Python dev setup
-      uv
-      ruff
-      black
-
-      # C/C++ dev setup
-      clang
-      gcc
-      cmake
-      gnumake
-      lldb
-      gdb
-      clang-tools
-      pkg-config
-
-      # Golang dev setup
-      go
-      gofumpt
-      goimports-reviser
-
-      # PHP
-      php83
-      php83Packages.composer
-      php83Packages.phpstan
-      php83Packages.php-cs-fixer
-
-      # JS/TS
-      nodejs
-      nodePackages.npm
-      nodePackages.jsonlint
-      bun
-      eslint
-      eslint_d
-      prettier
-      prettierd
-
-      # Lua
-      lua51Packages.lua
-      lua51Packages.luarocks
-      lua51Packages.luacheck
-      stylua
-
-      # Nix
-      statix
-      deadnix
-
-      # Terraform
-      terraform
-      tflint
-    ];
+    systemPackages = with pkgs; [];
   };
 
   system.defaults = {

@@ -23,15 +23,7 @@
         username = "stefan";
         homeDirectory = "/Users/stefan";
 
-        packages = with pkgs; [
-          exercism
-          lazygit
-
-          # go-blueprint
-          # awscli2
-          # ssm-session-manager-plugin
-          # terraform
-        ];
+        packages = with pkgs; [ ];
 
         stateVersion = "24.11";
       };
@@ -46,6 +38,20 @@
           ripgrep.enable = true;
           zoxide.enable = true;
           zsh.enable = true;
+        };
+
+        dev = {
+          aws.enable = true;
+          c.enable = true;
+          go.enable = true;
+          javascript.enable = true;
+          lua.enable = true;
+          nix.enable = true;
+          php.enable = true;
+          python.enable = true;
+          rust.enable = true;
+          terraform.enable = true;
+          zig.enable = true;
         };
 
         desktop = {

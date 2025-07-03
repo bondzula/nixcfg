@@ -23,40 +23,23 @@
           imagemagick
           fd
           ripgrep
-
-          # Build tools
-
           unzip
           wget
           tree-sitter
-
-          # Rust
-          cargo
-          rustc
 
           hadolint
           commitlint
           dotenv-linter
 
           # Language Servers
-          zls # Zig
-          nixd # Nix
-          gopls # Go
-          pyright # Python
-          intelephense # PHP
-          terraform-ls # Terraform
-          lua-language-server # Lua
-          vue-language-server # Vue
           bash-language-server # Bash
-          cmake-language-server # Cmake
-          typescript-language-server # JS/TS
           tailwindcss-language-server # Tailwind
           vscode-langservers-extracted # HTML/CSS/JSON
           dockerfile-language-server-nodejs # Dockerfile
           harper # Spell checking
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
-          pngpaste # Used for img-clip plugin (macOS only)
+          pngpaste
         ];
     };
 
