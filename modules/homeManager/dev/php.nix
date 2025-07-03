@@ -14,7 +14,7 @@
       php83Packages.composer
       php83Packages.phpstan
       php83Packages.php-cs-fixer
-      intelephense
+      phpactor
     ];
   };
 }
