@@ -36,7 +36,7 @@
       "/opt/homebrew/bin"
     ];
 
-    systemPackages = with pkgs; [];
+    systemPackages = with pkgs; [ ];
   };
 
   system.defaults = {

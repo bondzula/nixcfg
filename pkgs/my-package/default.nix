@@ -1,2 +1,3 @@
-# Your custom nix-package
-# ...
+{ pkgs, ... }:
+{
+}
