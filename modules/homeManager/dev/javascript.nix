@@ -16,7 +16,7 @@
       bun
       eslint
       eslint_d
-      prettier
+      # prettier # FIXME: Conflict with the composer package
       prettierd
       vue-language-server
       typescript-language-server
