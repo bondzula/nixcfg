@@ -23,7 +23,9 @@
         username = "stefan";
         homeDirectory = "/Users/stefan";
 
-        packages = with pkgs; [ ];
+        packages = with pkgs; [
+          claude-code
+        ];
 
         stateVersion = "24.11";
       };
