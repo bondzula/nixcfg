@@ -10,8 +10,7 @@
 
   config = lib.mkIf config.homeModules.dev.javascript.enable {
     home.packages = with pkgs; [
-      nodejs
-      nodePackages.npm
+      nodejs_20
       nodePackages.jsonlint
       bun
       eslint
