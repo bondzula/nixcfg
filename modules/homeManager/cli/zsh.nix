@@ -32,17 +32,13 @@
         if [[ $(tty) == "/dev/tty1" ]]; then
           exec Hyprland &>/dev/null   # replace the shell with Hyprland, silence output
         fi
-      '';
 
-      # initExtra = ''
-      #   # Setup NODE
-      #   path+=('/home/bondzula/.npm-packages/bin')
-      #
-      #   export NODE_PATH="~/.npm-packages/lib/node_modules"
-      #
-      #   # Export path
-      #   export PATH
-      # '';
+        # Golang path
+        path+=('${config.home.homeDirectory}/go/bin')
+
+        # Export path
+        export PATH
+      '';
 
       envExtra = ''
         export XDG_CACHE_HOME=~/.cache
