@@ -12,12 +12,14 @@
     home.packages = with pkgs; [
       nodejs_20
       nodePackages.jsonlint
+      pnpm
       bun
       eslint
       eslint_d
       # prettier # FIXME: Conflict with the composer package
       prettierd
       vue-language-server
+      astro-language-server
       typescript-language-server
     ];
   };
