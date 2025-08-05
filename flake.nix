@@ -87,6 +87,14 @@
       };
 
       homeConfigurations = {
+        "bondzula@corrino" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/corrino/home.nix
+          ];
+        };
+
         "bondzula@jakku" = home-manager.lib.homeManagerConfiguration {
           pkgs = nixpkgs.legacyPackages."x86_64-linux";
           extraSpecialArgs = { inherit inputs outputs; };

@@ -22,5 +22,20 @@
       astro-language-server
       typescript-language-server
     ];
+
+    # Configure npm to install global packages to home directory
+    home.file.".npmrc".text = ''
+      prefix=${config.home.homeDirectory}/.npm-global
+    '';
+
+    # Add npm global packages to PATH
+    home.sessionPath = [
+      "${config.home.homeDirectory}/.npm-global/bin"
+    ];
+
+    # Set NODE_PATH for global modules
+    home.sessionVariables = {
+      NODE_PATH = "${config.home.homeDirectory}/.npm-global/lib/node_modules";
+    };
   };
 }

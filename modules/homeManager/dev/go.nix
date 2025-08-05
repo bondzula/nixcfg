@@ -17,5 +17,10 @@
       golines
       go-blueprint
     ];
+
+    # Add Go bin directory to PATH
+    home.sessionPath = [
+      "${config.home.homeDirectory}/go/bin"
+    ];
   };
 }

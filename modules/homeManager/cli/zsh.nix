@@ -32,12 +32,6 @@
         if [[ $(tty) == "/dev/tty1" ]]; then
           exec Hyprland &>/dev/null   # replace the shell with Hyprland, silence output
         fi
-
-        # Golang path
-        path+=('${config.home.homeDirectory}/go/bin')
-
-        # Export path
-        export PATH
       '';
 
       envExtra = ''
