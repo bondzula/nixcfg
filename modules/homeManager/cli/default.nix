@@ -9,6 +9,7 @@
     ./gpg.nix
     ./nvim.nix
     ./ripgrep.nix
+    ./ssh.nix
     ./zoxide.nix
     ./zsh.nix
   ];
