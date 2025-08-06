@@ -91,22 +91,6 @@
             ./hosts/harkonnen/home.nix
           ];
         };
-
-        "bondzula@jakku" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/jakku/home.nix
-          ];
-        };
-
-        "bondzula@endor" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/endor/home.nix
-          ];
-        };
       };
     };
 }
