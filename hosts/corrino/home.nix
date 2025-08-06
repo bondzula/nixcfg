@@ -28,7 +28,7 @@
         enable = true;
         signing = {
           enable = true;
-          # key = "220F3B2DB85ED723";
+          key = "220F3B2DB85ED723";
         };
       };
       gpg.enable = true;
