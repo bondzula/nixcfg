@@ -6,6 +6,7 @@
     ./direnv.nix
     ./fzf.nix
     ./git.nix
+    ./gpg.nix
     ./nvim.nix
     ./ripgrep.nix
     ./zoxide.nix

@@ -23,9 +23,7 @@
         username = "stefan";
         homeDirectory = "/Users/stefan";
 
-        packages = with pkgs; [
-          claude-code
-        ];
+        packages = with pkgs; [ mariadb ];
 
         stateVersion = "24.11";
       };
@@ -35,7 +33,14 @@
           atuin.enable = true;
           direnv.enable = true;
           fzf.enable = true;
-          git.enable = true;
+          git = {
+            enable = true;
+            signing = {
+              enable = true;
+              key = "220F3B2DB85ED723";
+            };
+          };
+          gpg.enable = true;
           neovim.enable = true;
           ripgrep.enable = true;
           zoxide.enable = true;
