@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "fenrig";
+  networking.hostName = "fenring";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";
