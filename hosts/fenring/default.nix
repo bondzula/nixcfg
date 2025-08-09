@@ -32,6 +32,8 @@
     groups.bondzula.gid = 1000;
   };
 
+  programs.git.enable = true;
+
   services.openssh = {
     enable = true;
     allowSFTP = true;
