@@ -64,6 +64,13 @@
             ./hosts/vernius
           ];
         };
+
+        fenring = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/fenring
+          ];
+        };
       };
 
       darwinConfigurations = {
@@ -91,6 +98,7 @@
             ./hosts/harkonnen/home.nix
           ];
         };
+
       };
     };
 }
