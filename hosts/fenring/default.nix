@@ -79,9 +79,22 @@
         "fruit:resource" = "stream";
       };
 
-      Backups = {
-        comment = "Backup Storage";
-        path = "/mnt/backups";
+      Bondzula = {
+        comment = "Bondzula Home";
+        path = "/mnt/smb";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "valid users" = "bondzula";
+        "create mask" = "0640";
+        "directory mask" = "0750";
+        "force user" = "bondzula";
+        "force group" = "bondzula";
+      };
+
+      Courses = {
+        comment = "Video Courses";
+        path = "/mnt/courses";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
