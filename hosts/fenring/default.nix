@@ -89,7 +89,7 @@
 
       Bondzula = {
         comment = "Bondzula Home";
-        path = "/mnt/smb/bondzula";
+        path = "/mnt/bondzula";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
@@ -102,7 +102,7 @@
 
       Isidora = {
         comment = "Isidora Home";
-        path = "/mnt/smb/isidora";
+        path = "/mnt/isidora";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
@@ -129,8 +129,8 @@
   };
 
   systemd.tmpfiles.rules = [
-    "d /mnt/smb/bondzula 0750 bondzula bondzula -"
-    "d /mnt/smb/isidora 0750 isidora isidora -"
+    "d /mnt/bondzula 0750 bondzula bondzula -"
+    "d /mnt/isidora 0750 isidora isidora -"
     "d /mnt/backups 0750 bondzula bondzula -"
   ];
 
