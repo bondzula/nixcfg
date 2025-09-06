@@ -30,6 +30,14 @@
       ];
     };
     groups.bondzula.gid = 1000;
+
+    users.isidora = {
+      isNormalUser = true;
+      uid = 1001; # matches LXC idmap (container 1001 -> host 101001)
+      description = "Isidora";
+      extraGroups = [ ];
+    };
+    groups.isidora.gid = 1001;
   };
 
   programs.git.enable = true;
@@ -81,7 +89,7 @@
 
       Bondzula = {
         comment = "Bondzula Home";
-        path = "/mnt/smb";
+        path = "/mnt/smb/bondzula";
         browseable = "yes";
         "read only" = "no";
         "guest ok" = "no";
@@ -90,6 +98,19 @@
         "directory mask" = "0750";
         "force user" = "bondzula";
         "force group" = "bondzula";
+      };
+
+      Isidora = {
+        comment = "Isidora Home";
+        path = "/mnt/smb/isidora";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "valid users" = "isidora";
+        "create mask" = "0640";
+        "directory mask" = "0750";
+        "force user" = "isidora";
+        "force group" = "isidora";
       };
 
       Courses = {
@@ -107,7 +128,11 @@
     };
   };
 
-  systemd.tmpfiles.rules = [ "d /mnt/backups 0750 bondzula bondzula -" ];
+  systemd.tmpfiles.rules = [
+    "d /mnt/smb/bondzula 0750 bondzula bondzula -"
+    "d /mnt/smb/isidora 0750 isidora isidora -"
+    "d /mnt/backups 0750 bondzula bondzula -"
+  ];
 
   system.stateVersion = "24.11";
 }
