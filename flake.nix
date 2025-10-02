@@ -58,6 +58,20 @@
           ];
         };
 
+        torrent = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/media
+          ];
+        };
+
+        arr = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/media
+          ];
+        };
+
 
         # Old Hosts
         jakku = nixpkgs.lib.nixosSystem {
