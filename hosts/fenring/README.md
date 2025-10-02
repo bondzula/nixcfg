@@ -15,21 +15,15 @@ A Proxmox LXC container serving as a NAS for backup storage using Samba.
 Since you already have the NixOS template, create the container using the Proxmox CLI:
 
 ```bash
-# Container parameters
-ctid="111"
-ctname="fenring"
-ctt="local:vztmpl/nixos-system-x86_64-linux.tar.xz"
-cts="local-flash"
-
-# Create the container with static IP
-pct create ${ctid} ${ctt} \
-  --hostname=${ctname} \
-  --ostype=nixos --unprivileged=0 --features nesting=1 \
+pct create 111 local:vztmpl/nixos-system-x86_64-linux.tar.xz \
+  --hostname fenring \
+  --cores 2 \
+  --memory 8192 \
+  --rootfs local-flash:20 \
+  --unprivileged 1 \
+  --features keyctl=1,nesting=1 \
   --net0 name=eth0,bridge=vmbr0,ip=192.168.0.11/24,gw=192.168.0.1 \
-  --arch=amd64 --swap=1024 --memory=8192 \
-  --storage=${cts} --rootfs ${cts}:20
-
-# No need to resize since we're allocating 20G upfront
+  --onboot 1
 ```
 
 ### 2. Add Backup Storage Mount Point
@@ -37,17 +31,25 @@ pct create ${ctid} ${ctt} \
 Before starting the container, add your backup storage as a bind mount:
 
 ```bash
-# Stop container if running
-pct stop ${ctid}
+# Add the mappings
+pct set 111 -mp0 /zeus/backups,mp=/mnt/backups
 
 # Edit the container config
-nano /etc/pve/lxc/${ctid}.conf
+nano /etc/pve/lxc/111.conf
 
-# Add this line (adjust the host path to your actual backup storage):
-mp0: /path/to/your/backup/storage,mp=/mnt/backups
+# Add UID mappings at the bottom
+lxc.idmap: u 0 100000 1000
+lxc.idmap: g 0 100000 1000
+lxc.idmap: u 1000 1000 1
+lxc.idmap: g 1000 1000 1
+lxc.idmap: u 1001 101001 64534
+lxc.idmap: g 1001 101001 64534
+
+# On proxmox, make sure /etc/subgid and /etc/subuid have the following:
+root:1000:1
 
 # Start the container
-pct start ${ctid}
+pct start 111
 ```
 
 ### 3. Initial Container Setup
@@ -56,7 +58,7 @@ Enter the container and prepare it:
 
 ```bash
 # Enter the container
-pct enter ${ctid}
+pct enter 111
 
 # Source the environment
 source /etc/set-environment
@@ -64,48 +66,13 @@ source /etc/set-environment
 # Delete the default root password (we'll use SSH keys)
 passwd --delete root
 
-# Only needed if you plan to deploy locally (Option B)
-# nix-env -iA nixos.git
+# Add git package
+nix-channle --update
+
+nix-shell -p git
 ```
 
 ### 4. Deploy Your Configuration
-
-You have several options for deployment:
-
-#### Option A: Remote Build and Deploy from macOS (Recommended)
-
-Since you're on macOS, the easiest approach is to SSH into the container and build there while using your local flake:
-
-```bash
-# From your local machine, copy your flake to the container
-cd /path/to/nixcfg
-rsync -av --exclude='.git' --exclude='result' . root@192.168.0.11:/tmp/nixcfg/
-
-# SSH into the container and deploy
-ssh root@192.168.0.11
-cd /tmp/nixcfg
-nixos-rebuild switch --flake .#fenring
-```
-
-#### Option B: Build locally and copy (Advanced)
-
-If you have Nix installed on macOS, you can build locally and copy:
-
-```bash
-# From your local machine where you have the nixcfg repo
-cd /path/to/nixcfg
-
-# Build the configuration locally (requires linux builder on macOS)
-nix build .#nixosConfigurations.fenring.config.system.build.toplevel
-
-# Copy the built system to the container and activate it
-nix copy --to ssh://root@192.168.0.11 ./result
-ssh root@192.168.0.11 "./result/bin/switch-to-configuration switch"
-```
-
-Note: This requires a Linux builder configured on your macOS system.
-
-#### Option C: Local Deployment from within the container
 
 Deploy from within the container itself:
 
@@ -118,20 +85,10 @@ git clone https://github.com/bondzula/nixcfg /etc/nixos
 cd /etc/nixos
 
 # Build and switch to the fenring configuration
-nixos-rebuild switch --flake .#fenring
+nixos-rebuild switch --flake /etc/nixos#fenring
 ```
 
-### 5. Configure Samba Password
-
-After the rebuild completes, set up the Samba password for your user:
-
-```bash
-# The user 'bondzula' was created by the configuration
-# Set the Samba password (can be different from system password)
-smbpasswd -a bondzula
-```
-
-### 6. Verify Services
+### 5. Verify Services
 
 Check that everything is running correctly:
 
@@ -147,16 +104,6 @@ systemctl status sshd
 
 # Verify the backup directory exists with correct permissions
 ls -la /mnt/backups
-```
-
-### 7. Network Configuration
-
-The container is configured with static IP `192.168.0.11`.
-
-Test SSH access from your host machine:
-
-```bash
-ssh bondzula@192.168.0.11
 ```
 
 ## Accessing the NAS

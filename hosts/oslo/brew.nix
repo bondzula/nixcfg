@@ -25,6 +25,7 @@
 
     # Cask
     casks = [
+      "mpv"
       "1password"
       "betterdisplay"
       "cleanshot"
