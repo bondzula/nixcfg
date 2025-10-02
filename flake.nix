@@ -44,6 +44,15 @@
       overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
+        proxy = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/proxy
+          ];
+        };
+
+
+        # Old Hosts
         jakku = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
