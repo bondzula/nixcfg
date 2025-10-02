@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "proxy";
+  networking.hostName = "net";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";

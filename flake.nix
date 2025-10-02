@@ -44,10 +44,10 @@
       overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
-        proxy = nixpkgs.lib.nixosSystem {
+        net = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/proxy
+            ./hosts/net
           ];
         };
 
@@ -61,37 +61,14 @@
         torrent = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/media
+            ./hosts/torrent
           ];
         };
 
         arr = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/media
-          ];
-        };
-
-
-        # Old Hosts
-        jakku = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/jakku
-          ];
-        };
-
-        endor = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/endor
-          ];
-        };
-
-        vernius = nixpkgs.lib.nixosSystem {
-          specialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/vernius
+            ./hosts/arr
           ];
         };
 
@@ -113,22 +90,13 @@
       };
 
       homeConfigurations = {
-        "bondzula@corrino" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/corrino/home.nix
-          ];
-        };
-
-        "bondzula@harkonnen" = home-manager.lib.homeManagerConfiguration {
-          pkgs = nixpkgs.legacyPackages."x86_64-linux";
-          extraSpecialArgs = { inherit inputs outputs; };
-          modules = [
-            ./hosts/harkonnen/home.nix
-          ];
-        };
-
+        # "bondzula@corrino" = home-manager.lib.homeManagerConfiguration {
+        #   pkgs = nixpkgs.legacyPackages."x86_64-linux";
+        #   extraSpecialArgs = { inherit inputs outputs; };
+        #   modules = [
+        #     ./hosts/corrino/home.nix
+        #   ];
+        # };
       };
     };
 }
