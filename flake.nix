@@ -51,6 +51,13 @@
           ];
         };
 
+        media = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/media
+          ];
+        };
+
 
         # Old Hosts
         jakku = nixpkgs.lib.nixosSystem {
