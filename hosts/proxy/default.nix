@@ -19,12 +19,16 @@
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  virtualisation.docker = {
+    enable = true;
+  };
+
   users = {
     users.bondzula = {
       initialHashedPassword = "$y$j9T$lTYSuKE.0BiJazE5fJ72B0$XMEo8mlRwfxuT6Q8bDielkRNGIFy.To2qsEYw7hbIm/";
       isNormalUser = true;
       description = "Stefan Bondzulic";
-      extraGroups = [ "wheel" ];
+      extraGroups = [ "wheel" "docker" ];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINF99lU/SLfVoC/Vua9Zbu58d57HfrZZNOZMuI/0xteL openpgp:0x2EED2F74"
       ];
