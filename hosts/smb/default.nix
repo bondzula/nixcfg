@@ -115,7 +115,6 @@
 
   systemd.tmpfiles.rules = [
     "d /mnt/bondzula 0750 bondzula bondzula -"
-    "d /mnt/backups 0750 bondzula bondzula -"
   ];
 
   system.stateVersion = "24.11";
