@@ -54,7 +54,6 @@
     enable = true;
     port = 41641;
     useRoutingFeatures = "server";
-    extraUpFlags = [ "--ssh" ];
   };
 
   networking.firewall.enable = false;
