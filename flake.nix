@@ -72,10 +72,10 @@
           ];
         };
 
-        arr = nixpkgs.lib.nixosSystem {
+        richese = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/arr
+            ./hosts/richese
           ];
         };
 
