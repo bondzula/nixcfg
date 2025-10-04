@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "arr";
+  networking.hostName = "richese";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";
