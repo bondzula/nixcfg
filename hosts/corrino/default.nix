@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "net";
+  networking.hostName = "corrino";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";
@@ -48,6 +48,13 @@
       PasswordAuthentication = false;
       KbdInteractiveAuthentication = false;
     };
+  };
+
+  services.tailscale = {
+    enable = true;
+    port = 41641;
+    useRoutingFeatures = "client";
+    extraUpFlags = [ "--ssh" ];
   };
 
   networking.firewall.enable = false;

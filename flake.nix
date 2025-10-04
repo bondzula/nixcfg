@@ -44,10 +44,10 @@
       overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
-        net = nixpkgs.lib.nixosSystem {
+        corrino = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/net
+            ./hosts/corrino
           ];
         };
 
