@@ -51,10 +51,10 @@
           ];
         };
 
-        cloud = nixpkgs.lib.nixosSystem {
+        smb = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/cloud
+            ./hosts/smb
           ];
         };
 
