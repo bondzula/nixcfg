@@ -51,10 +51,10 @@
           ];
         };
 
-        smb = nixpkgs.lib.nixosSystem {
+        atreides = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/smb
+            ./hosts/atreides
           ];
         };
 

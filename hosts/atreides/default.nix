@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "smb";
+  networking.hostName = "atreides";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";
