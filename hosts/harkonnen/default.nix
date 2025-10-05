@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "torrent";
+  networking.hostName = "harkonnen";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";

@@ -65,10 +65,10 @@
           ];
         };
 
-        torrent = nixpkgs.lib.nixosSystem {
+        harkonnen = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/torrent
+            ./hosts/harkonnen
           ];
         };
 
