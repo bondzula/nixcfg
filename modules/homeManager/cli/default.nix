@@ -56,6 +56,7 @@
     tealdeer
     tree
     wakeonlan
+    wget
     zip
   ];
 }
