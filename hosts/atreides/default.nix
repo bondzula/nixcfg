@@ -19,6 +19,21 @@
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver # iHD: mandatory for Arc
+      intel-compute-runtime # OpenCL: HDR tone-mapping & subtitles
+      vpl-gpu-rt # QSV on 11th gen or newer
+      intel-ocl # OpenCL support
+    ];
+  };
+
+  environment.sessionVariables = {
+    LIBVA_DRIVER_NAME = "iHD";
+    LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
+  };
+
   virtualisation.docker = {
     enable = true;
   };
@@ -28,7 +43,12 @@
       initialHashedPassword = "$y$j9T$lTYSuKE.0BiJazE5fJ72B0$XMEo8mlRwfxuT6Q8bDielkRNGIFy.To2qsEYw7hbIm/";
       isNormalUser = true;
       description = "Stefan Bondzulic";
-      extraGroups = [ "wheel" "docker" ];
+      extraGroups = [
+        "docker"
+        "render"
+        "video"
+        "wheel"
+      ];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINF99lU/SLfVoC/Vua9Zbu58d57HfrZZNOZMuI/0xteL openpgp:0x2EED2F74"
       ];
