@@ -6,7 +6,7 @@
     ../../modules/nixos
   ];
 
-  networking.hostName = "media";
+  networking.hostName = "vernius";
 
   nix.settings.sandbox = false;
   nixpkgs.hostPlatform = "x86_64-linux";
@@ -16,7 +16,9 @@
     privileged = false;
   };
 
-  ## Arc drivers & VA-API
+  time.timeZone = "Europe/Belgrade";
+  i18n.defaultLocale = "en_US.UTF-8";
+
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -27,14 +29,10 @@
     ];
   };
 
-  ## environment tweaks
   environment.sessionVariables = {
     LIBVA_DRIVER_NAME = "iHD";
     LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
   };
-
-  time.timeZone = "Europe/Belgrade";
-  i18n.defaultLocale = "en_US.UTF-8";
 
   virtualisation.docker = {
     enable = true;

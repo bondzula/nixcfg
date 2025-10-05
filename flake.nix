@@ -58,10 +58,10 @@
           ];
         };
 
-        media = nixpkgs.lib.nixosSystem {
+        vernius = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
-            ./hosts/media
+            ./hosts/vernius
           ];
         };
 
