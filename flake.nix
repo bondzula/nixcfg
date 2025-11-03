@@ -97,13 +97,13 @@
       };
 
       homeConfigurations = {
-        # "bondzula@corrino" = home-manager.lib.homeManagerConfiguration {
-        #   pkgs = nixpkgs.legacyPackages."x86_64-linux";
-        #   extraSpecialArgs = { inherit inputs outputs; };
-        #   modules = [
-        #     ./hosts/corrino/home.nix
-        #   ];
-        # };
+        "bondzula@omarchy" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/omarch/home.nix
+          ];
+        };
       };
     };
 }
