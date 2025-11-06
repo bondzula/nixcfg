@@ -16,9 +16,6 @@
 
   programs.btop = {
     enable = true;
-    settings = {
-      vim_keys = true;
-    };
   };
 
   programs.bat = {
@@ -49,7 +46,7 @@
     htop
     httpie
     jq
-    neofetch
+    fastfetch
     procs
     ripgrep
     rsync
@@ -58,5 +55,6 @@
     wakeonlan
     wget
     zip
+    curl
   ];
 }
