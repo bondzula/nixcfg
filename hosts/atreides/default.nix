@@ -51,6 +51,7 @@
       ];
       openssh.authorizedKeys.keys = [
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINF99lU/SLfVoC/Vua9Zbu58d57HfrZZNOZMuI/0xteL openpgp:0x2EED2F74"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINjo2o1vRJTER5HHNZRGHlYW9gxjqCngGKxhVN/EEtLF openpgp:0xACE015E2"
       ];
     };
     groups.bondzula.gid = 1000;

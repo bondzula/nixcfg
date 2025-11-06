@@ -8,36 +8,54 @@
   config = lib.mkIf config.homeModules.cli.ssh.enable {
     programs.ssh = {
       enable = true;
-      
-      extraConfig = ''
-        # Security settings
-        PasswordAuthentication no
-        ChallengeResponseAuthentication no
-        HashKnownHosts yes
-        
-        # Connection settings
-        ServerAliveInterval 60
-        ServerAliveCountMax 3
-        
-        # Reuse connections for faster subsequent connections
-        ControlMaster auto
-        ControlPath ~/.ssh/sockets/%r@%h-%p
-        ControlPersist 600
-        
-        # Common hosts
-        Host github.com
-          HostName github.com
-          User git
-          
-        Host gitlab.com
-          HostName gitlab.com
-          User git
-          
-        # Local network - less strict
-        Host *.local 192.168.*
-          StrictHostKeyChecking no
-          UserKnownHostsFile /dev/null
-      '';
+      enableDefaultConfig = false;
+
+      matchBlocks = {
+        "*" = {
+          # Security settings
+          hashKnownHosts = true;
+
+          # Connection settings
+          serverAliveInterval = 60;
+          serverAliveCountMax = 3;
+
+          # Reuse connections for faster subsequent connections
+          controlMaster = "auto";
+          controlPath = "~/.ssh/sockets/%r@%h-%p";
+          controlPersist = "600";
+
+          extraOptions = {
+            PasswordAuthentication = "no";
+            ChallengeResponseAuthentication = "no";
+          };
+        };
+
+        "github.com" = {
+          hostname = "github.com";
+          user = "git";
+        };
+
+        "gitlab.com" = {
+          hostname = "gitlab.com";
+          user = "git";
+        };
+
+        "*.local 192.168.*" = {
+          extraOptions = {
+            StrictHostKeyChecking = "no";
+            UserKnownHostsFile = "/dev/null";
+          };
+        };
+        "atreides" = {
+          hostname = "192.168.0.20";
+          user = "bondzula";
+          extraOptions = {
+            PubKeyAuthentication = "unbound";
+            IdentitiesOnly = "yes";
+          };
+        };
+
+      };
     };
     
     # Create SSH sockets directory for connection multiplexing
