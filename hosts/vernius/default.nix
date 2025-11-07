@@ -60,7 +60,7 @@
   };
 
   environment.systemPackages = with pkgs; [
-    git neovim
+    git neovim libva-utils
   ];
 
   services.openssh = {
