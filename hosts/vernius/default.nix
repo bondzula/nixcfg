@@ -1,4 +1,4 @@
-{ modulesPath, pkgs, ... }:
+{ modulesPath, pkgs, lib, ... }:
 
 {
   imports = [
@@ -56,8 +56,8 @@
       ];
     };
 
-    groups.video.gid = 44;
-    groups.render.gid = 104;
+    groups.video.gid = lib.mkForce 44;
+    groups.render.gid = lib.mkForce 104;
     groups.bondzula.gid = 1000;
   };
 
