@@ -54,11 +54,14 @@
         "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINjo2o1vRJTER5HHNZRGHlYW9gxjqCngGKxhVN/EEtLF openpgp:0xACE015E2"
       ];
     };
+
+    groups.video.gid = 44;
+    groups.render.gid = 104;
     groups.bondzula.gid = 1000;
   };
 
   environment.systemPackages = with pkgs; [
-    git neovim
+    git neovim libva-utils
   ];
 
   services.openssh = {
