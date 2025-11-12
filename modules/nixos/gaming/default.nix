@@ -27,10 +27,11 @@
     environment.sessionVariables.STEAM_EXTRA_COMPAT_TOOLS_PATHS = "/home/bondzula/.steam/root/compatibilitytools.d";
 
     environment.systemPackages = with pkgs; [
-      protonup
+      steam-rom-manager
       mangohud
       goverlay
-      lutris
+      heroic
+      protonup-qt
     ];
   };
 }

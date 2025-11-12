@@ -12,6 +12,17 @@
     };
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
+    quickshell = {
+      url = "github:outfoxxed/quickshell";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
+    noctalia = {
+      url = "github:noctalia-dev/noctalia-shell";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.quickshell.follows = "quickshell";
+    };
+
     dotfiles = {
       url = "github:bondzula/dotfiles";
       flake = false;
@@ -44,6 +55,13 @@
       overlays = import ./overlays { inherit inputs; };
 
       nixosConfigurations = {
+        endor = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/endor
+          ];
+        };
+
         corrino = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
@@ -102,6 +120,14 @@
           extraSpecialArgs = { inherit inputs outputs; };
           modules = [
             ./hosts/omarch/home.nix
+          ];
+        };
+
+        "bondzula@endor" = home-manager.lib.homeManagerConfiguration {
+          pkgs = nixpkgs.legacyPackages."x86_64-linux";
+          extraSpecialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/endor/home.nix
           ];
         };
       };

@@ -11,6 +11,7 @@
     ./hardware
     ./gaming
     ./podman
+    ./vm
     ./zsh
   ];
 
