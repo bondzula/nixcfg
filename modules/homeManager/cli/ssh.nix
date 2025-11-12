@@ -29,32 +29,6 @@
             ChallengeResponseAuthentication = "no";
           };
         };
-
-        "github.com" = {
-          hostname = "github.com";
-          user = "git";
-        };
-
-        "gitlab.com" = {
-          hostname = "gitlab.com";
-          user = "git";
-        };
-
-        "*.local 192.168.*" = {
-          extraOptions = {
-            StrictHostKeyChecking = "no";
-            UserKnownHostsFile = "/dev/null";
-          };
-        };
-        "atreides" = {
-          hostname = "192.168.1.20";
-          user = "bondzula";
-          extraOptions = {
-            PubKeyAuthentication = "unbound";
-            IdentitiesOnly = "yes";
-          };
-        };
-
       };
     };
     
