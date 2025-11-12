@@ -60,7 +60,7 @@
             enable = true;
             signing = {
               enable = true;
-              key = "58863D4EB729C46F";
+              key = "178B9BECF5202296";
             };
           };
           gpg.enable = true;

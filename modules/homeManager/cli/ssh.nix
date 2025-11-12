@@ -47,7 +47,7 @@
           };
         };
         "atreides" = {
-          hostname = "192.168.0.20";
+          hostname = "192.168.1.20";
           user = "bondzula";
           extraOptions = {
             PubKeyAuthentication = "unbound";
