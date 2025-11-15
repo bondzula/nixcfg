@@ -134,6 +134,19 @@
         "force user" = "bondzula";
         "force group" = "bondzula";
       };
+
+      Media = {
+        comment = "Media";
+        path = "/mnt/media";
+        browseable = "yes";
+        "read only" = "no";
+        "guest ok" = "no";
+        "valid users" = "bondzula";
+        "create mask" = "0640";
+        "directory mask" = "0750";
+        "force user" = "bondzula";
+        "force group" = "bondzula";
+      };
     };
   };
 
