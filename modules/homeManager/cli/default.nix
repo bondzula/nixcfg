@@ -12,6 +12,7 @@
     ./ssh.nix
     ./zoxide.nix
     ./zsh.nix
+    ./tmux.nix
   ];
 
   programs.btop = {

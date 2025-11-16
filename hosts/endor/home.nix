@@ -26,13 +26,13 @@
         packages = with pkgs; [
           discord
           firefox
-          ghostty
           obs-studio
           obsidian
           ticktick
           vscode
           wowup-cf
           zed-editor
+          google-chrome
           claude-code
           codex
           nautilus
@@ -69,6 +69,7 @@
           ssh.enable = true;
           zoxide.enable = true;
           zsh.enable = true;
+          tmux.enable = true;
         };
 
         dev = {
@@ -85,7 +86,12 @@
           zig.enable = true;
         };
 
+        gaming = {
+          retro.enable = true;
+        };
+
         desktop = {
+          ghostty.enable = true;
           fonts.enable = true;
         };
       };

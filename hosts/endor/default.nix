@@ -53,6 +53,9 @@
   services.displayManager.sddm.enable = true;
   services.displayManager.sddm.wayland.enable = true; # Ensures Wayland support for Niri
 
+  # Enable xserver for fallback
+  programs.xwayland.enable = true;
+
   # Enable Niri WM
   programs.niri.enable = true;
 
@@ -138,6 +141,10 @@
     gnome-keyring
     xwayland-satellite
     swayidle
+
+    # Wine support
+    wineWowPackages.stable
+    winetricks
   ];
 
   # List services that you want to enable:

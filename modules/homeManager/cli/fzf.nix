@@ -7,6 +7,7 @@
     programs.fzf = {
       enable = true;
       enableZshIntegration = true;
+      tmux.enableShellIntegration = true;
       # Default command for the ALT+C key binding
       # Only list directories which aren't ignored by VCS. The `.git` directory is always ignored.
       # changeDirWidgetCommand =

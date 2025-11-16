@@ -10,6 +10,7 @@
     ./cli
     ./desktop
     ./dev
+    ./gaming
   ];
 
   nixpkgs = {
