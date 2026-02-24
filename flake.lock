@@ -17,22 +17,6 @@
         "type": "github"
       }
     },
-    "dotfiles": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1745517738,
-        "narHash": "sha256-kyVoMUIA3HgwdS8SFwAheU5ziygT613o71qkSnz/Jx0=",
-        "owner": "bondzula",
-        "repo": "dotfiles",
-        "rev": "831eee407708a7fc162b90be7b5bebc272066367",
-        "type": "github"
-      },
-      "original": {
-        "owner": "bondzula",
-        "repo": "dotfiles",
-        "type": "github"
-      }
-    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -169,7 +153,6 @@
     },
     "root": {
       "inputs": {
-        "dotfiles": "dotfiles",
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nix-homebrew": "nix-homebrew",

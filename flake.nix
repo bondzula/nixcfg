@@ -22,17 +22,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
       inputs.quickshell.follows = "quickshell";
     };
-
-    dotfiles = {
-      url = "github:bondzula/dotfiles";
-      flake = false;
-    };
   };
 
   outputs =
     {
       self,
-      dotfiles,
       nix-darwin,
       nix-homebrew,
       home-manager,
