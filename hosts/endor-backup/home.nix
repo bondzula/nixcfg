@@ -67,9 +67,6 @@
           neovim.enable = true;
           ripgrep.enable = true;
           ssh.enable = true;
-          zoxide.enable = true;
-          zsh.enable = true;
-          tmux.enable = true;
         };
 
         dev = {

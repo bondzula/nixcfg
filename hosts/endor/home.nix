@@ -28,20 +28,18 @@
         enable = true;
         signing = {
           enable = true;
-          key = "1329D49EB0C696CD";
+          key = "BDA52C5AAD82B9D3";
         };
       };
       gpg.enable = true;
       neovim.enable = true;
       ripgrep.enable = true;
       ssh.enable = true;
-      zoxide.enable = true;
-      zsh.enable = true;
     };
 
     dev = {
       aws.enable = true;
-      # c.enable = true;
+      c.enable = true;
       go.enable = true;
       javascript.enable = true;
       lua.enable = true;

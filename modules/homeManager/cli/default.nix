@@ -10,9 +10,6 @@
     ./nvim.nix
     ./ripgrep.nix
     ./ssh.nix
-    ./zoxide.nix
-    ./zsh.nix
-    ./tmux.nix
   ];
 
   programs.btop = {
@@ -35,11 +32,6 @@
     ];
   };
 
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
   home.packages = with pkgs; [
     coreutils
     dig
@@ -57,5 +49,11 @@
     wget
     zip
     curl
+    sesh
+    stow
+    yazi
+    zsh
+    tmux
+    zoxide
   ];
 }

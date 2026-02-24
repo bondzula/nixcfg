@@ -43,11 +43,6 @@
         ];
     };
 
-    # home.file.".config/nvim" = {
-    #   source = "${inputs.dotfiles}/nvim";
-    #   recursive = true;
-    # };
-
     # Set default editor to be nvim
     home.sessionVariables = {
       EDITOR = "${pkgs.neovim}/bin/nvim";
