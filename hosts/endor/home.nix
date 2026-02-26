@@ -26,12 +26,7 @@
       fzf.enable = true;
       git = {
         enable = true;
-        signing = {
-          enable = true;
-          key = "BDA52C5AAD82B9D3";
-        };
       };
-      gpg.enable = true;
       neovim.enable = true;
       ripgrep.enable = true;
       ssh.enable = true;
