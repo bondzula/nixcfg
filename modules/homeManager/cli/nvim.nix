@@ -34,7 +34,7 @@
           bash-language-server # Bash
           tailwindcss-language-server # Tailwind
           vscode-langservers-extracted # HTML/CSS/JSON
-          dockerfile-language-server-nodejs # Dockerfile
+          dockerfile-language-server # Dockerfile
           harper # Spell checking
         ]
         ++ lib.optionals pkgs.stdenv.isDarwin [
