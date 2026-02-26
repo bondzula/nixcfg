@@ -28,7 +28,6 @@
         enable = true;
       };
       neovim.enable = true;
-      ripgrep.enable = true;
       ssh.enable = true;
     };
 

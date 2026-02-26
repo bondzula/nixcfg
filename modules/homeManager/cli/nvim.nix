@@ -16,7 +16,6 @@
       withNodeJs = true;
       withPython3 = true;
 
-      extraLuaPackages = ps: [ ps.magick ];
       extraPackages =
         with pkgs;
         [
