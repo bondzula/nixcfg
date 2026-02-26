@@ -12,7 +12,7 @@
     home.packages = with pkgs; [
       php83
       php83Packages.composer
-      php83Packages.phpstan
+      phpstan
       php83Packages.php-cs-fixer
       phpactor
     ];

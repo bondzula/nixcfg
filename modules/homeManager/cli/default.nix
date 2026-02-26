@@ -8,7 +8,6 @@
     ./git.nix
     ./gpg.nix
     ./nvim.nix
-    ./ripgrep.nix
     ./ssh.nix
   ];
 

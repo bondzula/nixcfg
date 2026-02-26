@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeModules.cli.gpg = {
@@ -19,9 +24,7 @@
     services.gpg-agent = {
       enable = true;
       enableSshSupport = true;
-      pinentryPackage = if pkgs.stdenv.isDarwin 
-        then pkgs.pinentry_mac 
-        else pkgs.pinentry-qt;
+      pinentry.package = if pkgs.stdenv.isDarwin then pkgs.pinentry_mac else pkgs.pinentry-qt;
       defaultCacheTtl = 600;
       maxCacheTtl = 7200;
     };

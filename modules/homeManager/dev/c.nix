@@ -15,7 +15,7 @@ in
     enable = lib.mkEnableOption "Enable C / C++ Module";
     preferGcc = lib.mkOption {
       type = lib.types.bool;
-      default = pkgs.stdenv.isDarwin;
+      default = !pkgs.stdenv.isDarwin;
       description = "Whether to prefer GCC over Clang";
     };
   };

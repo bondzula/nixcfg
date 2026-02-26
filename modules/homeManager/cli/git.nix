@@ -1,10 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   options.homeModules.cli.git = {
     enable = lib.mkEnableOption "enable git";
     signing = {
-      enable = lib.mkEnableOption "enable commit signing" // { default = false; };
+      enable = lib.mkEnableOption "enable commit signing" // {
+        default = false;
+      };
       key = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
         default = null;
@@ -16,31 +23,34 @@
   config = lib.mkIf config.homeModules.cli.git.enable {
     programs.git = {
       enable = true;
-      userName = "Stefan Bondzulic";
-      userEmail = "stefanbondzulic@gmail.com";
 
       signing = lib.mkIf config.homeModules.cli.git.signing.enable {
         signByDefault = true;
         key = config.homeModules.cli.git.signing.key;
       };
 
-      extraConfig = {
+      settings = {
+        user = {
+          name = "Stefan Bondzulic";
+          email = "stefanbondzulic@gmail.com";
+        };
+
         init.defaultBranch = "main";
-        fetch.prune = true;  # Fixed typo: was "featch"
+        fetch.prune = true;
         pull.rebase = true;
         merge.conflictstyle = "diff3";
         diff.external = "difft";
-        
+
         # GPG configuration for signing
         gpg = lib.mkIf config.homeModules.cli.git.signing.enable {
           program = "${pkgs.gnupg}/bin/gpg";
         };
-        
+
         # Better SSH configuration
         core = {
           sshCommand = "ssh";
         };
-        
+
         # Credential caching for HTTPS (optional)
         credential = {
           helper = "cache --timeout=3600";
