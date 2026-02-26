@@ -13,7 +13,7 @@
       nixd
       deadnix
       statix
-      nixfmt-rfc-style
+      nixfmt
     ];
   };
 }
