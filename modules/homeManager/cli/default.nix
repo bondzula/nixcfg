@@ -11,48 +11,31 @@
     ./ssh.nix
   ];
 
-  programs.btop = {
-    enable = true;
-  };
-
-  programs.bat = {
-    enable = true;
-  };
-
-  programs.eza = {
-    enable = true;
-    enableZshIntegration = true;
-    enableBashIntegration = true;
-    extraOptions = [
-      "-l"
-      "--icons"
-      "--git"
-      "-a"
-    ];
-  };
-
   home.packages = with pkgs; [
+    bat
+    btop
     coreutils
+    curl
     dig
+    eza
+    fastfetch
     fd
     htop
     httpie
     jq
-    fastfetch
     procs
     ripgrep
     rsync
+    sesh
+    stow
     tealdeer
+    tmux
     tree
     wakeonlan
     wget
-    zip
-    curl
-    sesh
-    stow
     yazi
-    zsh
-    tmux
+    zip
     zoxide
+    zsh
   ];
 }
