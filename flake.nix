@@ -84,6 +84,13 @@
           ];
         };
 
+        jakku = nixpkgs.lib.nixosSystem {
+          specialArgs = { inherit inputs outputs; };
+          modules = [
+            ./hosts/jakku
+          ];
+        };
+
         richese = nixpkgs.lib.nixosSystem {
           specialArgs = { inherit inputs outputs; };
           modules = [
