@@ -1,9 +1,4 @@
-{
-  pkgs,
-  inputs,
-  outputs,
-  ...
-}:
+{ pkgs, ... }:
 
 {
   imports = [
@@ -24,9 +19,7 @@
       atuin.enable = true;
       direnv.enable = true;
       fzf.enable = true;
-      git = {
-        enable = true;
-      };
+      git.enable = true;
       neovim.enable = true;
       ssh.enable = true;
     };
