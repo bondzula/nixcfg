@@ -10,19 +10,17 @@
       enable = true;
       enableDefaultConfig = false;
 
-      matchBlocks = {
+      settings = {
         "*" = {
           # Security settings
-          hashKnownHosts = true;
+          HashKnownHosts = true;
 
           # Connection settings
-          serverAliveInterval = 60;
-          serverAliveCountMax = 3;
+          ServerAliveInterval = 60;
+          ServerAliveCountMax = 3;
 
-          extraOptions = {
-            PasswordAuthentication = "no";
-            ChallengeResponseAuthentication = "no";
-          };
+          PasswordAuthentication = "no";
+          ChallengeResponseAuthentication = "no";
         };
       };
     };

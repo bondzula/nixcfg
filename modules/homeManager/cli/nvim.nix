@@ -9,44 +9,43 @@
   options.homeModules.cli.neovim.enable = lib.mkEnableOption "enable neovim";
 
   config = lib.mkIf config.homeModules.cli.neovim.enable {
-    programs.neovim = {
-      enable = true;
-      vimAlias = true;
-      viAlias = true;
-      withNodeJs = true;
-      withPython3 = true;
+    home.packages = [
+      (pkgs.neovim.override {
+        vimAlias = true;
+        viAlias = true;
+        withNodeJs = true;
+        withPython3 = true;
+        withRuby = false;
+      })
 
-      extraPackages =
-        with pkgs;
-        [
-          imagemagick
-          fd
-          ripgrep
-          unzip
-          wget
-          tree-sitter
+      # CLI Utilities & Neovim Dependencies
+      pkgs.imagemagick
+      pkgs.fd
+      pkgs.ripgrep
+      pkgs.unzip
+      pkgs.wget
+      pkgs.tree-sitter
 
-          hadolint
-          commitlint
-          dotenv-linter
+      # Linters
+      pkgs.hadolint
+      pkgs.commitlint
+      pkgs.dotenv-linter
 
-          # Language Servers
-          bash-language-server # Bash
-          tailwindcss-language-server # Tailwind
-          vscode-langservers-extracted # HTML/CSS/JSON
-          dockerfile-language-server # Dockerfile
-          harper # Spell checking
-        ]
-        ++ lib.optionals pkgs.stdenv.isDarwin [
-          pngpaste
-        ];
-    };
+      # Language Servers
+      pkgs.bash-language-server # Bash
+      pkgs.tailwindcss-language-server # Tailwind
+      pkgs.vscode-langservers-extracted # HTML/CSS/JSON
+      pkgs.dockerfile-language-server # Dockerfile
+      pkgs.harper # Spell checking
+    ] ++ lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.pngpaste
+    ];
 
     # Set default editor to be nvim
     home.sessionVariables = {
-      EDITOR = "${pkgs.neovim}/bin/nvim";
-      VISUAL = "${pkgs.neovim}/bin/nvim";
-      SUDO_EDITOR = "${pkgs.neovim}/bin/nvim";
+      EDITOR = "nvim";
+      VISUAL = "nvim";
+      SUDO_EDITOR = "nvim";
       MANPAGER = "nvim +Man!";
     };
   };
