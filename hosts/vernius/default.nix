@@ -14,9 +14,21 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   proxmoxLXC = {
-    manageNetwork = false;
+    # NixOS owns the IP config below; Proxmox net0 only provides the
+    # bridge/MAC (set its IPv4 mode to "Static" with no address).
+    manageNetwork = true;
     privileged = false;
   };
+
+  networking.useDHCP = false;
+  networking.interfaces.eth0.ipv4.addresses = [
+    {
+      address = "192.168.1.30";
+      prefixLength = 24;
+    }
+  ];
+  networking.defaultGateway = "192.168.1.1";
+  networking.nameservers = [ "192.168.1.1" ];
 
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
