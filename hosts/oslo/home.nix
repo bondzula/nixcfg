@@ -33,13 +33,7 @@
           atuin.enable = true;
           direnv.enable = true;
           fzf.enable = true;
-          git = {
-            enable = true;
-            signing = {
-              enable = true;
-              key = "1329D49EB0C696CD";
-            };
-          };
+          git.enable = true;
           gpg.enable = true;
           neovim.enable = true;
           ssh.enable = true;

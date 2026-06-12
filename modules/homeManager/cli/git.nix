@@ -5,34 +5,29 @@
   ...
 }:
 
+let
+  gitCfg = config.homeModules.cli.git;
+  signingKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG3jrrfHENkZhu81UP0vU9DjyiTir1ipZgvOsdF6rLDO";
+  sshSignerProgram =
+    if pkgs.stdenv.isDarwin then
+      "/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    else
+      "/opt/1Password/op-ssh-sign";
+in
 {
   options.homeModules.cli.git = {
     enable = lib.mkEnableOption "enable git";
-    signing = {
-      enable = lib.mkEnableOption "enable commit signing" // {
-        default = false;
-      };
-      key = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
-        default = null;
-        description = "GPG key ID for signing commits";
-      };
-    };
   };
 
-  config = lib.mkIf config.homeModules.cli.git.enable {
+  config = lib.mkIf gitCfg.enable {
     programs.git = {
       enable = true;
-
-      signing = lib.mkIf config.homeModules.cli.git.signing.enable {
-        signByDefault = true;
-        key = config.homeModules.cli.git.signing.key;
-      };
 
       settings = {
         user = {
           name = "Stefan Bondzulic";
           email = "stefanbondzulic@gmail.com";
+          signingkey = signingKey;
         };
 
         init.defaultBranch = "main";
@@ -41,24 +36,22 @@
         merge.conflictstyle = "diff3";
         diff.external = "difft";
 
-        # GPG configuration for signing
-        gpg = lib.mkIf config.homeModules.cli.git.signing.enable {
-          program = "${pkgs.gnupg}/bin/gpg";
+        commit.gpgsign = true;
+        gpg = {
+          format = "ssh";
+          ssh.program = sshSignerProgram;
         };
 
-        # Better SSH configuration
         core = {
           sshCommand = "ssh";
         };
 
-        # Credential caching for HTTPS (optional)
         credential = {
           helper = "cache --timeout=3600";
         };
       };
     };
 
-    # Enable GitHub CLI as well
     programs.gh = {
       enable = true;
       settings = {

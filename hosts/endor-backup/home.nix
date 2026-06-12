@@ -56,13 +56,7 @@
           atuin.enable = true;
           direnv.enable = true;
           fzf.enable = true;
-          git = {
-            enable = true;
-            signing = {
-              enable = true;
-              key = "178B9BECF5202296";
-            };
-          };
+          git.enable = true;
           gpg.enable = true;
           neovim.enable = true;
           ripgrep.enable = true;
