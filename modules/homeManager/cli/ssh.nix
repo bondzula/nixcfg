@@ -21,16 +21,11 @@
 
           PasswordAuthentication = "no";
           ChallengeResponseAuthentication = "no";
+
+          # Use 1Password SSH agent
+          IdentityAgent = "~/.1password/agent.sock";
         };
       };
-    };
-
-    # Ensure GPG agent has SSH support enabled
-    services.gpg-agent.enableSshSupport = lib.mkForce true;
-
-    # Set SSH_AUTH_SOCK to use GPG agent
-    home.sessionVariables = {
-      SSH_AUTH_SOCK = "$(gpgconf --list-dirs agent-ssh-socket)";
     };
   };
 }
