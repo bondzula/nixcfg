@@ -12,6 +12,10 @@
     };
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
 
+    # Manages containers as podman quadlets (systemd units).
+    # Pure module flake, no nixpkgs input to follow.
+    quadlet-nix.url = "github:SEIAROTg/quadlet-nix";
+
     quickshell = {
       url = "github:outfoxxed/quickshell";
       inputs.nixpkgs.follows = "nixpkgs";

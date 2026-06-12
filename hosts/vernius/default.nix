@@ -1,9 +1,11 @@
-{ modulesPath, pkgs, lib, ... }:
+{ modulesPath, pkgs, lib, inputs, ... }:
 
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix") # Substitute for hardware-config.nix when working with proxmox LXC
     ../../modules/nixos
+    inputs.quadlet-nix.nixosModules.quadlet
+    ./media.nix
   ];
 
   networking.hostName = "vernius";
@@ -34,9 +36,9 @@
     LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
   };
 
-  virtualisation.docker = {
-    enable = true;
-  };
+  # Containers run as podman quadlets, see media.nix.
+  # dockerCompat in this module keeps the `docker` CLI working as an alias.
+  nixosModules.podman.enable = true;
 
   # Setup users
   users = {
@@ -48,11 +50,10 @@
         "wheel"
         "video"
         "render"
-        "docker"
+        "podman"
       ];
       openssh.authorizedKeys.keys = [
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINF99lU/SLfVoC/Vua9Zbu58d57HfrZZNOZMuI/0xteL openpgp:0x2EED2F74"
-        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGiMjBO8faj7KwdeuXYlzBY/WYwMjjIb0L+B2iP5E5OE openpgp:0x25754616"
+        "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIJYQ1fd/qI/5pM7aqSTn4lzO9/sc49pIkm9O6YK6z+K"
       ];
     };
 
