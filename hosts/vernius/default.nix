@@ -1,11 +1,9 @@
-{ modulesPath, pkgs, lib, inputs, ... }:
+{ modulesPath, pkgs, lib, ... }:
 
 {
   imports = [
     (modulesPath + "/virtualisation/proxmox-lxc.nix") # Substitute for hardware-config.nix when working with proxmox LXC
     ../../modules/nixos
-    inputs.quadlet-nix.nixosModules.quadlet
-    ./media.nix
   ];
 
   networking.hostName = "vernius";
@@ -48,9 +46,29 @@
     LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
   };
 
-  # Containers run as podman quadlets, see media.nix.
-  # dockerCompat in this module keeps the `docker` CLI working as an alias.
-  nixosModules.podman.enable = true;
+  nixosModules.selfhosted = {
+    enable = true;
+
+    jellyfin = {
+      enable = true;
+      configDir = "/mnt/appdata/jellyfin/config";
+      cacheDir = "/mnt/appdata/jellyfin/cache";
+      mediaDir = "/mnt/media";
+      quickSync.enable = true;
+    };
+
+    jellystat = {
+      enable = true;
+      dataDir = "/mnt/appdata/jellystat/config";
+      dbDir = "/mnt/appdata/jellystat/db";
+      secretsFile = "/mnt/appdata/jellystat/secrets.env";
+    };
+
+    jellyseerr = {
+      enable = true;
+      configDir = "/mnt/appdata/jellyseerr/config";
+    };
+  };
 
   # Setup users
   users = {

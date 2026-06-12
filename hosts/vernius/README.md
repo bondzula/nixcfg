@@ -1,7 +1,7 @@
 # vernius — media server
 
 Unprivileged NixOS LXC on Proxmox with Intel GPU passthrough, running the
-Jellyfin media stack as rootful podman quadlets (see `media.nix`).
+Jellyfin media stack as rootful podman quadlets, enabled via `nixosModules.selfhosted` in `default.nix` (modules live in `modules/nixos/selfhosted/`).
 
 | Service      | Port | URL                              |
 | ------------ | ---- | -------------------------------- |

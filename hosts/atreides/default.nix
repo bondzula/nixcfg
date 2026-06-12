@@ -12,9 +12,21 @@
   nixpkgs.hostPlatform = "x86_64-linux";
 
   proxmoxLXC = {
-    manageNetwork = false;
+    # NixOS owns the IP config below; Proxmox net0 only provides the
+    # bridge/MAC (set its IPv4 mode to "Static" with no address).
+    manageNetwork = true;
     privileged = false;
   };
+
+  networking.useDHCP = false;
+  networking.interfaces.eth0.ipv4.addresses = [
+    {
+      address = "192.168.1.20";
+      prefixLength = 24;
+    }
+  ];
+  networking.defaultGateway = "192.168.1.1";
+  networking.nameservers = [ "192.168.1.1" ];
 
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
@@ -34,8 +46,46 @@
     LIBVA_DRIVERS_PATH = "${pkgs.intel-media-driver}/lib/dri";
   };
 
-  virtualisation.docker = {
+  nixosModules.selfhosted = {
     enable = true;
+
+    immich = {
+      enable = true;
+      uploadLocation = "/mnt/immich";
+      dbDataLocation = "/mnt/appdata/immich/db";
+      modelCacheDir = "/mnt/appdata/immich/model-cache";
+      secretsFile = "/mnt/appdata/immich/secrets.env";
+      hwAccel.enable = true;
+    };
+
+    gitea = {
+      enable = true;
+      dataDir = "/mnt/gitea";
+      configDir = "/mnt/appdata/gitea/data";
+      dbDir = "/mnt/appdata/gitea/db";
+      secretsFile = "/mnt/appdata/gitea/secrets.env";
+    };
+
+    paperless = {
+      enable = true;
+      dataDir = "/mnt/appdata/paperless/data";
+      documentsDir = "/mnt/paperless";
+      dbDir = "/mnt/appdata/paperless/db";
+      redisDir = "/mnt/appdata/paperless/redis";
+      secretsFile = "/mnt/appdata/paperless/secrets.env";
+    };
+
+    karakeep = {
+      enable = true;
+      dataDir = "/mnt/appdata/karakeep/data";
+      meiliDir = "/mnt/appdata/karakeep/meilisearch";
+      secretsFile = "/mnt/appdata/karakeep/secrets.env";
+    };
+
+    grocy = {
+      enable = true;
+      configDir = "/mnt/appdata/grocy";
+    };
   };
 
   users = {
@@ -44,7 +94,7 @@
       isNormalUser = true;
       description = "Stefan Bondzulic";
       extraGroups = [
-        "docker"
+        "podman"
         "render"
         "video"
         "wheel"

@@ -1,0 +1,226 @@
+{
+  admin :2019
+	# Email for ACME account
+	email {$CLOUDFLARE_EMAIL}
+
+	# Global DNS challenge provider config
+	acme_dns cloudflare {$CLOUDFLARE_API_TOKEN}
+}
+
+proxmox.local.bondzulic.com {
+	reverse_proxy https://192.168.1.5:8006 {
+		transport http {
+			tls_insecure_skip_verify
+		}
+
+		header_up Host {upstream_hostport}
+		header_up X-Real-IP {remote_ip}
+		header_up X-Forwarded-For {remote_ip}
+	}
+
+	tls {
+		dns cloudflare {$CLOUDFLARE_API_TOKEN}
+	}
+}
+
+homepage.local.bondzulic.com {
+	reverse_proxy 192.168.1.10:3000 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+speedtest.local.bondzulic.com {
+	reverse_proxy 192.168.1.10:8080 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+uptime-kuma.local.bondzulic.com {
+	reverse_proxy 192.168.1.10:3001 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+immich.local.bondzulic.com {
+	reverse_proxy 192.168.1.20:2283 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+gitea.local.bondzulic.com {
+	reverse_proxy 192.168.1.20:3000 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+paperless.local.bondzulic.com {
+	reverse_proxy 192.168.1.20:8000 {
+    header_down Referrer-Policy "strict-origin-when-cross-origin"
+
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+grocy.local.bondzulic.com {
+	reverse_proxy 192.168.1.20:9283 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+karakeep.local.bondzulic.com {
+	reverse_proxy 192.168.1.20:3050 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+rdt.local.bondzulic.com {
+	reverse_proxy 192.168.1.40:6500 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+sabnzbd.local.bondzulic.com {
+	reverse_proxy 192.168.1.40:8080 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+qbittorrent.local.bondzulic.com {
+	reverse_proxy 192.168.1.40:8085 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+prowlarr.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:9696 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+radarr-hd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:7878 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+radarr-uhd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:7879 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+sonarr-hd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:8989 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+sonarr-uhd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:8990 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+sonarr-anime.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:8991 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+bazarr-hd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:6767 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+bazarr-uhd.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:6768 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+bazarr-anime.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:6769 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+notifiarr.local.bondzulic.com {
+	reverse_proxy 192.168.1.41:5454 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+jellyfin.local.bondzulic.com {
+	reverse_proxy 192.168.1.30:8096 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+jellyseerr.local.bondzulic.com {
+	reverse_proxy 192.168.1.30:5055 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+jellystat.local.bondzulic.com {
+	reverse_proxy 192.168.1.30:3000 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
+
+silverbullet.local.bondzulic.com {
+	reverse_proxy 192.168.1.50:3000 {
+		# Standard headers
+		header_up Host {host}
+		header_up X-Real-IP {remote_ip}
+	}
+}
