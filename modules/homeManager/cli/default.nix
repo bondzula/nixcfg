@@ -23,6 +23,7 @@
     fd
     htop
     httpie
+    hunk
     jq
     procs
     ripgrep
