@@ -45,9 +45,9 @@
 
     # Applications from Apple Store
     masApps = {
-      "Infuse • Video Player" = 1136220934;
-      "Tailscale" = 1475387142;
-      "TickTick:To-Do List, Calendar" = 966085870;
+      # "Infuse" = 1136220934;
+      # "Tailscale" = 1475387142;
+      # "TickTick" = 966085870;
     };
 
     onActivation = {
