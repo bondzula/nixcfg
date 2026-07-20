@@ -20,6 +20,7 @@
       direnv.enable = true;
       fzf.enable = true;
       git.enable = true;
+      herdr.enable = true;
       neovim.enable = true;
       ssh.enable = true;
     };

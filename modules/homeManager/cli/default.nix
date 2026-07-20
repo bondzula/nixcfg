@@ -7,6 +7,7 @@
     ./fzf.nix
     ./git.nix
     ./gpg.nix
+    ./herdr.nix
     ./nvim.nix
     ./ssh.nix
   ];
