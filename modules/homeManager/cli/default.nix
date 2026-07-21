@@ -16,6 +16,7 @@
     bat
     btop
     coreutils
+    croc
     curl
     dig
     eza
