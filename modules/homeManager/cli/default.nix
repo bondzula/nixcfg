@@ -28,6 +28,7 @@
     procs
     ripgrep
     rsync
+    sendme
     sesh
     stow
     tealdeer
