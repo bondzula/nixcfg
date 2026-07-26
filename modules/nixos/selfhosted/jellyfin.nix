@@ -3,6 +3,7 @@
 let
   shared = config.nixosModules.selfhosted;
   cfg = shared.jellyfin;
+  inherit (config.virtualisation.quadlet) networks;
 in
 {
   options.nixosModules.selfhosted.jellyfin = {
@@ -67,31 +68,36 @@ in
       }
     ];
 
-    virtualisation.quadlet.containers.jellyfin = {
-      # Fail loudly at start instead of silently transcoding on CPU.
-      unitConfig = lib.mkIf cfg.quickSync.enable {
-        AssertPathExists = cfg.quickSync.device;
+    virtualisation.quadlet = {
+      networks.jellyfin = { };
+
+      containers.jellyfin = {
+        # Fail loudly at start instead of silently transcoding on CPU.
+        unitConfig = lib.mkIf cfg.quickSync.enable {
+          AssertPathExists = cfg.quickSync.device;
+        };
+        containerConfig = {
+          image = cfg.image;
+          autoUpdate = if cfg.autoUpdate then "registry" else null;
+          user = shared.uid;
+          group = shared.gid;
+          addGroups = lib.optionals cfg.quickSync.enable [
+            (toString config.users.groups.render.gid)
+          ];
+          devices = lib.optionals cfg.quickSync.enable [
+            "${cfg.quickSync.device}:${cfg.quickSync.device}"
+          ];
+          noNewPrivileges = true;
+          publishPorts = [ "${toString cfg.port}:8096" ];
+          volumes = [
+            "${cfg.configDir}:/config"
+            "${cfg.cacheDir}:/cache"
+            "${cfg.mediaDir}:${cfg.mediaDir}"
+          ];
+          networks = [ networks.jellyfin.ref ];
+        };
+        serviceConfig.Restart = "always";
       };
-      containerConfig = {
-        image = cfg.image;
-        autoUpdate = if cfg.autoUpdate then "registry" else null;
-        user = shared.uid;
-        group = shared.gid;
-        addGroups = lib.optionals cfg.quickSync.enable [
-          (toString config.users.groups.render.gid)
-        ];
-        devices = lib.optionals cfg.quickSync.enable [
-          "${cfg.quickSync.device}:${cfg.quickSync.device}"
-        ];
-        noNewPrivileges = true;
-        publishPorts = [ "${toString cfg.port}:8096" ];
-        volumes = [
-          "${cfg.configDir}:/config"
-          "${cfg.cacheDir}:/cache"
-          "${cfg.mediaDir}:${cfg.mediaDir}"
-        ];
-      };
-      serviceConfig.Restart = "always";
     };
   };
 }

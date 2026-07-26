@@ -1,5 +1,5 @@
-# Jellystat + its postgres. If jellyfin is enabled on the same host it is
-# joined to the jellystat network so it stays reachable by container name.
+# Jellystat + its postgres. If jellyfin is enabled on the same host, jellystat
+# also joins the jellyfin network so it stays reachable by container name.
 { config, lib, ... }:
 
 let
@@ -59,7 +59,8 @@ in
             environmentFiles = [ cfg.secretsFile ];
             publishPorts = [ "${toString cfg.port}:3000" ];
             volumes = [ "${cfg.dataDir}:/app/backend/backup-data" ];
-            networks = [ networks.jellystat.ref ];
+            networks = [ networks.jellystat.ref ]
+              ++ lib.optionals shared.jellyfin.enable [ networks.jellyfin.ref ];
           };
           serviceConfig.Restart = "always";
         };
@@ -79,10 +80,6 @@ in
             Restart = "always";
             TimeoutStartSec = "300";
           };
-        };
-
-        jellyfin = lib.mkIf shared.jellyfin.enable {
-          containerConfig.networks = [ networks.jellystat.ref ];
         };
       };
     };

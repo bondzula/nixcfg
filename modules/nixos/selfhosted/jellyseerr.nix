@@ -3,6 +3,7 @@
 let
   shared = config.nixosModules.selfhosted;
   cfg = shared.jellyseerr;
+  inherit (config.virtualisation.quadlet) networks;
 in
 {
   options.nixosModules.selfhosted.jellyseerr = {
@@ -34,6 +35,7 @@ in
         environments.TZ = shared.timezone;
         publishPorts = [ "${toString cfg.port}:5055" ];
         volumes = [ "${cfg.configDir}:/app/config" ];
+        networks = lib.optionals shared.jellyfin.enable [ networks.jellyfin.ref ];
       };
       serviceConfig.Restart = "always";
     };
