@@ -55,10 +55,10 @@
 
   nixosModules.selfhosted = {
     enable = true;
+    autoUpdate.calendar = "*-*-* *:00/5:00";
 
     racuni = {
       enable = true;
-      image = import ./racuni-image.nix;
       dataDir = "/srv/racuni/data";
       deploymentBackupDir = "/srv/racuni/deploy-backups";
       secretsFile = "/mnt/appdata/racuni/secrets.env";
@@ -103,6 +103,8 @@
       configDir = "/mnt/appdata/grocy";
     };
   };
+
+  systemd.timers.podman-auto-update.timerConfig.RandomizedDelaySec = lib.mkForce 0;
 
   users = {
     users.bondzula = {

@@ -3,47 +3,19 @@
 let
   shared = config.nixosModules.selfhosted;
   cfg = shared.racuni;
-  preflight = pkgs.writeShellScript "racuni-preflight" ''
-    set -euo pipefail
-    db=${lib.escapeShellArg "${cfg.dataDir}/racuni.db"}
-    if [ ! -s "$db" ]; then
-      echo "racuni: refusing to create an empty production database at $db" >&2
-      exit 1
-    fi
-    test -s ${lib.escapeShellArg cfg.registryAuthFile}
-    test -f ${lib.escapeShellArg cfg.secretsFile}
-    ${pkgs.gnugrep}/bin/grep -Eq '^RACUNI_PASSWORD=.+$' ${lib.escapeShellArg cfg.secretsFile}
-    # Another ad-hoc container must not write to this database concurrently.
-    for id in $(${pkgs.podman}/bin/podman ps -q); do
-      name=$(${pkgs.podman}/bin/podman inspect "$id" | ${pkgs.jq}/bin/jq -r \
-        --arg source ${lib.escapeShellArg cfg.dataDir} \
-        '.[] | select(any(.Mounts[]?; .Source == $source and .RW)) | .Name')
-      if [ -n "$name" ]; then
-        echo "racuni: stop container $name before starting production" >&2
-        exit 1
-      fi
-    done
-    result=$(${pkgs.sqlite}/bin/sqlite3 -readonly "$db" 'PRAGMA quick_check;')
-    if [ "$result" != ok ]; then
-      echo "racuni: database integrity check failed: $result" >&2
-      exit 1
-    fi
-    # SQLite's backup API includes committed WAL changes; raw .db copies do not.
-    dir=${lib.escapeShellArg cfg.deploymentBackupDir}
-    ${pkgs.coreutils}/bin/install -d -m 0700 "$dir"
-    snapshot=$(${pkgs.coreutils}/bin/mktemp "$dir/pre-start-$(${pkgs.coreutils}/bin/date -u +%Y%m%dT%H%M%SZ)-XXXXXX.db")
-    ${pkgs.sqlite}/bin/sqlite3 -readonly "$db" ".backup '$snapshot'"
-    test "$(${pkgs.sqlite}/bin/sqlite3 -readonly "$snapshot" 'PRAGMA quick_check;')" = ok
-    echo "racuni: saved pre-start database snapshot to $snapshot"
-  '';
 in
 {
   options.nixosModules.selfhosted.racuni = {
     enable = lib.mkEnableOption "racuni invoice application";
     image = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = "Private GHCR image pinned by sha256 digest.";
+      type = lib.types.str;
+      default = "ghcr.io/bondzula/racuni:latest";
+      description = "Private container image; latest follows tested main builds.";
+    };
+    autoUpdate = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = "Let Podman's native auto-update service deploy new images.";
     };
     port = lib.mkOption { type = lib.types.port; default = 8080; };
     dataDir = lib.mkOption { type = lib.types.str; description = "Existing production directory mounted at /data."; };
@@ -53,20 +25,28 @@ in
   };
 
   config = lib.mkIf (shared.enable && cfg.enable) {
-    assertions = [{
-      assertion = cfg.image != null && builtins.match "ghcr\\.io/bondzula/racuni@sha256:[0-9a-f]{64}" cfg.image != null;
-      message = "racuni.image must pin ghcr.io/bondzula/racuni by sha256 digest.";
-    }];
+    systemd.tmpfiles.rules = [
+      "d ${cfg.deploymentBackupDir} 0700 root root -"
+      "d /root/.docker 0700 root root -"
+      "L /root/.docker/config.json - root root - ${cfg.registryAuthFile}"
+    ];
     virtualisation.quadlet.containers.racuni = {
       unitConfig.RequiresMountsFor = [ cfg.dataDir cfg.deploymentBackupDir ];
       containerConfig = {
         image = cfg.image;
+        autoUpdate = if cfg.autoUpdate then "registry" else null;
+        # Auto-update pulls changed images before restarting; cached images work at boot.
+        pull = "missing";
         publishPorts = [ "${toString cfg.port}:8080" ];
         volumes = [ "${cfg.dataDir}:/data" ];
         user = "65532:65532";
         environments = { RACUNI_DATA = "/data"; RACUNI_ADDR = ":8080"; RACUNI_TZ = shared.timezone; };
         environmentFiles = [ cfg.secretsFile ];
-        podmanArgs = [ "--authfile=${cfg.registryAuthFile}" "--label=important=true" ];
+        podmanArgs = [
+          "--authfile=${cfg.registryAuthFile}"
+          "--label=io.containers.autoupdate.authfile=${cfg.registryAuthFile}"
+          "--label=important=true"
+        ];
         notify = "healthy";
         healthCmd = "/racuni healthcheck";
         healthInterval = "30s";
@@ -75,7 +55,15 @@ in
         healthOnFailure = "kill";
       };
       serviceConfig = {
-        ExecStartPre = [ "${preflight}" ];
+        UMask = "0077";
+        # Native unit commands guard against an empty database and snapshot it
+        # before startup migrations. %% escapes systemd's percent specifiers.
+        ExecStartPre = [
+          "${pkgs.coreutils}/bin/test -s ${cfg.dataDir}/racuni.db"
+          "${pkgs.coreutils}/bin/test -s ${cfg.registryAuthFile}"
+          "${pkgs.gnugrep}/bin/grep -Eq ^RACUNI_PASSWORD=.+$ ${cfg.secretsFile}"
+          ''${pkgs.sqlite}/bin/sqlite3 -readonly "${cfg.dataDir}/racuni.db" "VACUUM INTO ('${cfg.deploymentBackupDir}/pre-start-' || strftime('%%Y%%m%%dT%%H%%M%%fZ','now') || '-' || lower(hex(randomblob(4))) || '.db');"''
+        ];
         Restart = "on-failure";
         RestartSec = "5s";
         TimeoutStartSec = "180s";

@@ -61,45 +61,53 @@ Containers are rootful — `sudo podman ps|logs|exec`, or `journalctl -u immich-
 
 ### Racuni
 
-Application source and CI live in `bondzula/racuni`. CI publishes tested private
-amd64 images to `ghcr.io/bondzula/racuni`; the exact production digest is pinned
-in `racuni-image.nix`. Updates are explicit, not automatic.
+GitHub Actions in `bondzula/racuni` publishes tested private amd64 images to
+`ghcr.io/bondzula/racuni:latest` after every successful main build. The racuni
+Quadlet opts into Podman's native registry auto-updates. On atreides,
+`podman-auto-update.timer` checks every five minutes, pulls changed images,
+and restarts their systemd services. Other applications remain opted out.
 
-The original production database is bind-mounted from `/srv/racuni/data`, owned
-by UID/GID 65532. Do not replace this with an anonymous volume. Startup refuses a
-missing or empty database, checks integrity, and saves a consistent SQLite
-snapshot to `/srv/racuni/deploy-backups` before running migrations. Another
-container with a writable mount of the same data directory prevents startup.
+The service starts at boot, publishes port 8080, and uses the original
+`/srv/racuni/data` bind mount as UID/GID 65532. Native `ExecStartPre` commands
+refuse a missing/empty database and take a consistent SQLite snapshot to
+`/srv/racuni/deploy-backups` before migrations. No deployment scripts are used.
 
-Before first deployment, run `sudo ./deploy/configure-atreides.sh` from the
-racuni checkout (or `sudo ~/racuni-deploy-setup/configure-atreides.sh` from the
-prepared server copy). It prompts for a classic GitHub token with
-`read:packages` and an app login password; both stay in root-owned files under
-`/mnt/appdata/racuni`, outside Git and the Nix store.
+Credentials already configured under `/mnt/appdata/racuni` are reused. The
+service and auto-updater explicitly use `registry-auth.json`. A tmpfiles
+symlink makes the same auth available at root's standard Docker-compatible
+credential location, without replacing an existing root auth file.
 
-For an update, preview the new image against a consistent database snapshot,
-update `racuni-image.nix`, commit/push, then on atreides:
+Install host configuration changes using your normal workflow:
 
 ```sh
 cd ~/nixcfg
 git pull --ff-only
-sudo ./scripts/deploy-racuni.sh
+sudo nixos-rebuild switch --flake .#atreides
 ```
 
-Check `systemctl status racuni` and `journalctl -u racuni`. The app's daily
-snapshots remain in `/srv/racuni/data/backups`; `mise run backup:pull` from the
-racuni checkout on your computer copies them off-host. This is an explicit
-backup pull, not a background schedule. Pre-start snapshots are root-owned and
-are not pruned by the application's 60-snapshot retention.
+After installation, application changes need only a push to racuni's main
+branch. For an immediate update or a manual pull:
 
-If a release migrated the schema, rollback may require both a previous image
-and its pre-start database snapshot. Stop writers and preserve the entire
-database directory including WAL/SHM before restoring. See `racuni/deploy/README.md`
-for the complete preview, backup, and restore procedure.
+```sh
+sudo systemctl start podman-auto-update.service
+# Alternatively:
+sudo podman pull ghcr.io/bondzula/racuni:latest
+sudo systemctl restart racuni
+```
+
+Inspect with `systemctl status racuni`, `journalctl -u racuni`, and
+`systemctl list-timers podman-auto-update`. App snapshots remain under
+`/srv/racuni/data/backups` (60 retained); pre-start snapshots are kept separately.
+Copy consistent snapshots off-host using normal SSH/SCP or your backup tool.
+
+Podman can revert an image when startup fails, but database migrations are not
+reverted automatically. Preserve the stopped database including WAL/SHM before
+restoring a compatible snapshot and image. Set `racuni.autoUpdate = false` and
+select an older image tag while investigating a rollback. See `racuni/deploy/README.md`.
 
 ### Other applications
 
-Nothing on this host auto-updates (matching the old watchtower label setup).
+Other applications do not opt into auto-updates (matching the old watchtower label setup).
 
 - Immich (mind breaking releases — read release notes first):
   `sudo podman pull ghcr.io/immich-app/immich-server:release ghcr.io/immich-app/immich-machine-learning:release-openvino`
