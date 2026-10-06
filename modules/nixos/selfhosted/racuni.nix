@@ -48,7 +48,8 @@ in
           "--label=important=true"
         ];
         notify = "healthy";
-        healthCmd = "/racuni healthcheck";
+        # Execute directly: this scratch image has no /bin/sh.
+        healthCmd = ''["/racuni", "healthcheck"]'';
         healthInterval = "30s";
         healthStartPeriod = "30s";
         healthRetries = 3;
