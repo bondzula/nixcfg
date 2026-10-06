@@ -18,6 +18,13 @@
     privileged = false;
   };
 
+  # autovt@ aliases getty@; override the actual template so LXC's tty1
+  # works without the /dev/tty0 virtual console device.
+  systemd.services."getty@".unitConfig.ConditionPathExists = [
+    ""
+    "/dev/%I"
+  ];
+
   networking.useDHCP = false;
   networking.interfaces.eth0.ipv4.addresses = [
     {
