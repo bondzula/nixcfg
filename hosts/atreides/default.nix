@@ -56,6 +56,15 @@
   nixosModules.selfhosted = {
     enable = true;
 
+    racuni = {
+      enable = true;
+      image = import ./racuni-image.nix;
+      dataDir = "/srv/racuni/data";
+      deploymentBackupDir = "/srv/racuni/deploy-backups";
+      secretsFile = "/mnt/appdata/racuni/secrets.env";
+      registryAuthFile = "/mnt/appdata/racuni/registry-auth.json";
+    };
+
     immich = {
       enable = true;
       uploadLocation = "/mnt/immich";
@@ -212,4 +221,3 @@
 
   system.stateVersion = "24.11";
 }
-

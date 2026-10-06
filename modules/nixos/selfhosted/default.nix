@@ -41,6 +41,7 @@ in
     ./jellystat.nix
     ./karakeep.nix
     ./paperless.nix
+    ./racuni.nix
     ./rdtclient.nix
     ./sabnzbd.nix
     ./speedtest-tracker.nix

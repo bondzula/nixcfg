@@ -13,6 +13,7 @@ main self-hosted applications as rootful podman quadlets, enabled via `nixosModu
 | paperless (+ db, broker)| 8000       | paperless.local.bondzulic.com  |
 | karakeep (+ chrome, meilisearch) | 3050 | karakeep.local.bondzulic.com |
 | grocy                   | 9283       | grocy.local.bondzulic.com      |
+| racuni                  | 8080       | http://192.168.1.20:8080       |
 
 TODO: bookworm is not yet defined here (it had no compose file in the old
 selfhosted repo either).
@@ -57,6 +58,46 @@ Containers are rootful — `sudo podman ps|logs|exec`, or `journalctl -u immich-
   gitea repos in `/mnt/gitea`; paperless documents in `/mnt/paperless`.
 
 ## Updates
+
+### Racuni
+
+Application source and CI live in `bondzula/racuni`. CI publishes tested private
+amd64 images to `ghcr.io/bondzula/racuni`; the exact production digest is pinned
+in `racuni-image.nix`. Updates are explicit, not automatic.
+
+The original production database is bind-mounted from `/srv/racuni/data`, owned
+by UID/GID 65532. Do not replace this with an anonymous volume. Startup refuses a
+missing or empty database, checks integrity, and saves a consistent SQLite
+snapshot to `/srv/racuni/deploy-backups` before running migrations. Another
+container with a writable mount of the same data directory prevents startup.
+
+Before first deployment, run `sudo ./deploy/configure-atreides.sh` from the
+racuni checkout (or `sudo ~/racuni-deploy-setup/configure-atreides.sh` from the
+prepared server copy). It prompts for a classic GitHub token with
+`read:packages` and an app login password; both stay in root-owned files under
+`/mnt/appdata/racuni`, outside Git and the Nix store.
+
+For an update, preview the new image against a consistent database snapshot,
+update `racuni-image.nix`, commit/push, then on atreides:
+
+```sh
+cd ~/nixcfg
+git pull --ff-only
+sudo ./scripts/deploy-racuni.sh
+```
+
+Check `systemctl status racuni` and `journalctl -u racuni`. The app's daily
+snapshots remain in `/srv/racuni/data/backups`; `mise run backup:pull` from the
+racuni checkout on your computer copies them off-host. This is an explicit
+backup pull, not a background schedule. Pre-start snapshots are root-owned and
+are not pruned by the application's 60-snapshot retention.
+
+If a release migrated the schema, rollback may require both a previous image
+and its pre-start database snapshot. Stop writers and preserve the entire
+database directory including WAL/SHM before restoring. See `racuni/deploy/README.md`
+for the complete preview, backup, and restore procedure.
+
+### Other applications
 
 Nothing on this host auto-updates (matching the old watchtower label setup).
 
