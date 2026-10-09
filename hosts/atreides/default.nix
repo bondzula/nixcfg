@@ -40,7 +40,7 @@
 
   security.sudo.extraConfig = ''
     Defaults:bondzula timestamp_type=global
-    Defaults:bondzula timestamp_timeout=5
+    Defaults:bondzula timestamp_timeout=15
   '';
 
   hardware.graphics = {
