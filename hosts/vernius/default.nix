@@ -31,6 +31,11 @@
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  security.sudo.extraConfig = ''
+    Defaults:bondzula timestamp_type=global
+    Defaults:bondzula timestamp_timeout=5
+  '';
+
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [

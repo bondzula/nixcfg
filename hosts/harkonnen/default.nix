@@ -31,6 +31,11 @@
   time.timeZone = "Europe/Belgrade";
   i18n.defaultLocale = "en_US.UTF-8";
 
+  security.sudo.extraConfig = ''
+    Defaults:bondzula timestamp_type=global
+    Defaults:bondzula timestamp_timeout=5
+  '';
+
   # gluetun + qbittorrent are intentionally not migrated yet (not live).
   nixosModules.selfhosted = {
     enable = true;
