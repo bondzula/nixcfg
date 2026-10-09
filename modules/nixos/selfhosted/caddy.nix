@@ -41,11 +41,20 @@ in
 
   config = lib.mkIf (shared.enable && cfg.enable) {
     virtualisation.quadlet.containers.caddy = {
+      unitConfig.RequiresMountsFor = [ cfg.dataDir cfg.configDir ];
       containerConfig = {
         image = cfg.image;
+        healthCmd = "wget -q -O /dev/null http://127.0.0.1:2019/config/";
+        healthInterval = "30s";
+        healthTimeout = "10s";
+        healthStartPeriod = "30s";
+        healthRetries = 3;
+        healthOnFailure = "kill";
+        notify = "healthy";
         publishPorts = [
           "80:80"
           "443:443"
+          "443:443/udp"
         ];
         volumes = [
           "${cfg.caddyfile}:/etc/caddy/Caddyfile:ro"
@@ -55,7 +64,10 @@ in
         environments.ACME_AGREE = "true";
         environmentFiles = [ cfg.secretsFile ];
       };
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        Restart = "always";
+        TimeoutStartSec = "120s";
+      };
     };
   };
 }

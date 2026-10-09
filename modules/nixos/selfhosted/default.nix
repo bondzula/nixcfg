@@ -44,7 +44,6 @@ in
     ./racuni.nix
     ./rdtclient.nix
     ./sabnzbd.nix
-    ./speedtest-tracker.nix
     ./uptime-kuma.nix
     ./zurg.nix
   ];

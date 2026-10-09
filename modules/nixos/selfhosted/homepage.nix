@@ -1,10 +1,3 @@
-# Homepage dashboard. Talks to the docker-compatible podman socket for its
-# container widgets, so this module also enables the socket.
-#
-# When configDir is set (a directory in this repo, e.g. ./config/homepage),
-# every file in it is mounted read-only over the writable dataDir — the
-# dashboard config lives in git, while logs and runtime state stay on the
-# host. Editing a file + rebuild restarts the container.
 { config, lib, ... }:
 
 let
@@ -20,6 +13,12 @@ in
 {
   options.nixosModules.selfhosted.homepage = {
     enable = lib.mkEnableOption "Homepage dashboard";
+
+    listenAddress = lib.mkOption {
+      type = lib.types.str;
+      default = "127.0.0.1";
+      description = "Host address on which to publish the dashboard.";
+    };
 
     port = lib.mkOption {
       type = lib.types.port;
@@ -52,29 +51,35 @@ in
   };
 
   config = lib.mkIf (shared.enable && cfg.enable) {
-    virtualisation.podman.dockerSocket.enable = true;
-
     virtualisation.quadlet.containers.homepage = {
       unitConfig = {
-        After = [ "podman.socket" ];
-        Requires = [ "podman.socket" ];
+        RequiresMountsFor = [ cfg.dataDir ];
       };
       containerConfig = {
         image = "ghcr.io/gethomepage/homepage:latest";
+        healthCmd = "node -e \"require('http').get({host:'127.0.0.1',port:3000,headers:{Host:process.env.HOMEPAGE_ALLOWED_HOSTS.split(',')[0]}},r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))\"";
+        healthInterval = "30s";
+        healthTimeout = "10s";
+        healthStartPeriod = "30s";
+        healthRetries = 3;
+        healthOnFailure = "kill";
+        notify = "healthy";
         autoUpdate = if cfg.autoUpdate then "registry" else null;
         environments = {
           PUID = shared.uid;
           PGID = shared.gid;
           HOMEPAGE_ALLOWED_HOSTS = cfg.allowedHosts;
         };
-        publishPorts = [ "${toString cfg.port}:3000" ];
+        publishPorts = [ "${cfg.listenAddress}:${toString cfg.port}:3000" ];
         volumes = [
           "${cfg.dataDir}:/app/config"
-          "/run/podman/podman.sock:/var/run/docker.sock:ro"
         ]
         ++ configMounts;
       };
-      serviceConfig.Restart = "always";
+      serviceConfig = {
+        Restart = "always";
+        TimeoutStartSec = "120s";
+      };
     };
   };
 }

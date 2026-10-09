@@ -1,5 +1,5 @@
 {
-  admin :2019
+	admin localhost:2019
 	# Email for ACME account
 	email {$CLOUDFLARE_EMAIL}
 
@@ -13,9 +13,7 @@ proxmox.local.bondzulic.com {
 			tls_insecure_skip_verify
 		}
 
-		header_up Host {upstream_hostport}
 		header_up X-Real-IP {remote_ip}
-		header_up X-Forwarded-For {remote_ip}
 	}
 
 	tls {
@@ -24,15 +22,7 @@ proxmox.local.bondzulic.com {
 }
 
 homepage.local.bondzulic.com {
-	reverse_proxy 192.168.1.10:3000 {
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-speedtest.local.bondzulic.com {
-	reverse_proxy 192.168.1.10:8080 {
+	reverse_proxy 10.88.0.1:3000 {
 		# Standard headers
 		header_up Host {host}
 		header_up X-Real-IP {remote_ip}
@@ -40,7 +30,7 @@ speedtest.local.bondzulic.com {
 }
 
 uptime-kuma.local.bondzulic.com {
-	reverse_proxy 192.168.1.10:3001 {
+	reverse_proxy 10.88.0.1:3001 {
 		# Standard headers
 		header_up Host {host}
 		header_up X-Real-IP {remote_ip}
@@ -49,40 +39,6 @@ uptime-kuma.local.bondzulic.com {
 
 immich.local.bondzulic.com {
 	reverse_proxy 192.168.1.20:2283 {
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-gitea.local.bondzulic.com {
-	reverse_proxy 192.168.1.20:3000 {
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-paperless.local.bondzulic.com {
-	reverse_proxy 192.168.1.20:8000 {
-    header_down Referrer-Policy "strict-origin-when-cross-origin"
-
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-grocy.local.bondzulic.com {
-	reverse_proxy 192.168.1.20:9283 {
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-karakeep.local.bondzulic.com {
-	reverse_proxy 192.168.1.20:3050 {
 		# Standard headers
 		header_up Host {host}
 		header_up X-Real-IP {remote_ip}
@@ -103,14 +59,6 @@ zurg.local.bondzulic.com {
 
 sabnzbd.local.bondzulic.com {
 	reverse_proxy 192.168.1.40:8080 {
-		# Standard headers
-		header_up Host {host}
-		header_up X-Real-IP {remote_ip}
-	}
-}
-
-qbittorrent.local.bondzulic.com {
-	reverse_proxy 192.168.1.40:8085 {
 		# Standard headers
 		header_up Host {host}
 		header_up X-Real-IP {remote_ip}
