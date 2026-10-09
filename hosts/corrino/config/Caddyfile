@@ -97,6 +97,10 @@ rdt.local.bondzulic.com {
 	}
 }
 
+zurg.local.bondzulic.com {
+	reverse_proxy 192.168.1.40:9999
+}
+
 sabnzbd.local.bondzulic.com {
 	reverse_proxy 192.168.1.40:8080 {
 		# Standard headers

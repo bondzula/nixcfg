@@ -46,6 +46,13 @@
       configDir = "/mnt/appdata/sabnzbd";
       usenetDir = "/mnt/media/usenet";
     };
+
+    zurg = {
+      enable = true;
+      dataDir = "/mnt/appdata/zurg/data";
+      secretsFile = "/mnt/appdata/zurg/secrets.env";
+      registryAuthFile = "/mnt/appdata/zurg/registry-auth.json";
+    };
   };
 
   users = {

@@ -46,6 +46,7 @@ in
     ./sabnzbd.nix
     ./speedtest-tracker.nix
     ./uptime-kuma.nix
+    ./zurg.nix
   ];
 
   options.nixosModules.selfhosted = {
