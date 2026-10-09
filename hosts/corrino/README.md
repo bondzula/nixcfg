@@ -20,8 +20,8 @@ ports are bound to the Podman bridge, which Caddy uses to reach them.
 Recovery from Proxmox: `pct enter <vmid>`, then
 `exec /run/current-system/sw/bin/bash --login` and
 `nixos-rebuild --rollback switch`. A Kuma major-version rollback also
-requires restoring the database from its pre-upgrade backup before starting
-an older image.
+requires a compatible database; do not start an older image against a
+migrated database.
 
 ## Containers and configuration
 
@@ -58,26 +58,7 @@ sudo podman healthcheck run uptime-kuma
 Only root is trusted by the Nix daemon. The SSH user belongs to wheel,
 without Podman socket access. Sudo remains password-protected.
 
-## Backups and updates
-
-`corrino-backup.timer` runs daily around 02:30 and catches missed runs.
-It archives Caddy certificates/config/secrets, Homepage configuration and
-Kuma state, using SQLite's online backup API for a consistent database copy
-and checking the copied database. Archives live in `/var/backups/corrino`,
-root-only, with daily archives older than seven days pruned. Pre-upgrade
-archives are retained separately.
-
-```bash
-sudo systemctl start corrino-backup
-systemctl status corrino-backup
-sudo ls -lh /var/backups/corrino
-```
-
-Copy backups off-host regularly; the daily timer alone does not protect
-against loss of the Proxmox host. Proxmox backup policy is managed outside
-this repository. Copying certificates/files while services run is best
-suited to operational recovery; before a major migration, stop the affected
-services and take a complete archive.
+## Updates
 
 For Caddy updates, pull the intended image, verify its version/digest and
 update `caddy.image` in `default.nix`. For Kuma updates, set its explicit

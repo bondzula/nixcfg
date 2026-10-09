@@ -106,45 +106,6 @@
     interfaces.podman0.allowedTCPPorts = [ 3000 3001 ];
   };
 
-  # Back up mutable dashboard config, certificates and a consistent Kuma DB.
-  systemd.services.corrino-backup = {
-    description = "Back up Corino application state";
-    requires = [ "uptime-kuma.service" ];
-    after = [ "uptime-kuma.service" ];
-    unitConfig.RequiresMountsFor = [ "/mnt/appdata" ];
-    serviceConfig = {
-      Type = "oneshot";
-      UMask = "0077";
-    };
-    path = with pkgs; [ coreutils findutils gnutar gzip sqlite ];
-    script = ''
-      set -euo pipefail
-      install -d -m 700 /var/backups/corrino
-      staging=$(mktemp -d /var/backups/corrino/.staging.XXXXXX)
-      trap 'rm -rf "$staging"' EXIT
-      cp -a /mnt/appdata/caddy "$staging/caddy"
-      cp -a /mnt/appdata/homepage "$staging/homepage"
-      mkdir "$staging/uptime-kuma"
-      tar -C /mnt/appdata/uptime-kuma \
-        --exclude='./kuma.db' --exclude='./kuma.db-wal' --exclude='./kuma.db-shm' \
-        -cf - . | tar -C "$staging/uptime-kuma" -xf -
-      sqlite3 -cmd ".timeout 60000" /mnt/appdata/uptime-kuma/kuma.db ".backup '$staging/uptime-kuma/kuma.db'"
-      test "$(sqlite3 "$staging/uptime-kuma/kuma.db" 'PRAGMA quick_check;')" = ok
-      archive=/var/backups/corrino/daily-$(date -u +%Y%m%dT%H%M%SZ).tar.gz
-      tar -C "$staging" -czf "$archive.partial" caddy homepage uptime-kuma
-      mv "$archive.partial" "$archive"
-      find /var/backups/corrino -maxdepth 1 -name 'daily-*.tar.gz' -mtime +7 -delete
-    '';
-  };
-  systemd.timers.corrino-backup = {
-    wantedBy = [ "timers.target" ];
-    timerConfig = {
-      OnCalendar = "*-*-* 02:30:00";
-      Persistent = true;
-      RandomizedDelaySec = "10m";
-    };
-  };
-
   system.stateVersion = "24.11";
 }
 
