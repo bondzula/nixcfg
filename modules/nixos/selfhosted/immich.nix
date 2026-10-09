@@ -101,10 +101,18 @@ in
               containers.immich-redis.ref
             ];
             AssertPathExists = lib.mkIf cfg.hwAccel.enable cfg.hwAccel.device;
+            RequiresMountsFor = [ cfg.uploadLocation ];
+            AssertPathIsDirectory = cfg.uploadLocation;
           };
           containerConfig = {
             image = cfg.serverImage;
             devices = lib.optionals cfg.hwAccel.enable [ "${cfg.hwAccel.device}:${cfg.hwAccel.device}" ];
+            # In an unprivileged LXC, device owners may be unmapped. Match
+            # the host's supplementary groups to access the passed GPU.
+            addGroups = lib.optionals cfg.hwAccel.enable [
+              (toString config.users.groups.render.gid)
+              (toString config.users.groups.video.gid)
+            ];
             publishPorts = [ "${toString cfg.port}:2283" ];
             volumes = [
               "${cfg.uploadLocation}:/data"
@@ -125,9 +133,14 @@ in
         # http://immich-machine-learning:3003, so the name matters.
         immich-machine-learning = {
           unitConfig.AssertPathExists = lib.mkIf cfg.hwAccel.enable cfg.hwAccel.device;
+          unitConfig.RequiresMountsFor = [ cfg.modelCacheDir ];
           containerConfig = {
             image = cfg.mlImage;
             devices = lib.optionals cfg.hwAccel.enable [ "${cfg.hwAccel.device}:${cfg.hwAccel.device}" ];
+            addGroups = lib.optionals cfg.hwAccel.enable [
+              (toString config.users.groups.render.gid)
+              (toString config.users.groups.video.gid)
+            ];
             volumes = [ "${cfg.modelCacheDir}:/cache" ];
             networks = [ networks.immich.ref ];
           };
@@ -145,6 +158,7 @@ in
         };
 
         immich-db = {
+          unitConfig.RequiresMountsFor = [ cfg.dbDataLocation ];
           containerConfig = {
             image = cfg.dbImage;
             environments.POSTGRES_INITDB_ARGS = "--data-checksums";

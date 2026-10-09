@@ -14,9 +14,37 @@ Zurg maintains the AllDebrid library index and serves authenticated WebDAV.
 Infuse fetches the video from AllDebrid directly, bypassing Harkonnen and
 Corrino. Infuse must support/follow these redirects and be able to reach
 AllDebrid. No rclone mount or media download directory is created here.
-Automatic ffprobe analysis, torrent repair and automatic deletion are disabled;
-the index is refreshed every 60 seconds. Adding torrents through Zurg is also
-disabled for this provider. The image does not opt into automatic updates.
+Automatic ffprobe analysis is enabled for newly indexed torrents. It reads
+parts of media files through Harkonnen to extract codecs, resolution and tracks,
+so there is some server bandwidth/CPU usage even though playback is redirected.
+It enriches metadata; it is not a complete media-integrity check.
+Automatic repair is enabled every 60 minutes with `restrict_repair_to_cached`
+enabled; Zurg can restart/re-add broken torrents on AllDebrid. Automatic
+deletion stays disabled. Repairs depend on upstream content availability and
+cannot guarantee every torrent remains playable.
+The index is refreshed every 60 seconds. Adding new acquisitions through Zurg's
+download-client/watchlist features is disabled for this provider; repairs of
+existing entries are enabled separately. Logging uses INFO. The image does not
+opt into automatic updates.
+
+### Library folders
+
+The WebDAV root contains `Movies`, `TV`, and `Anime`, created by Zurg filters.
+They share the `media` group, so a torrent appears in exactly one of these:
+
+- `Anime` (first): anime release-group markers or bracketed CRC32 checksums
+  in torrent/file names. An explicit `Akira.1988` rule covers the existing
+  anime movie, whose release uses normal movie naming.
+- `TV` (second): Zurg's episode detection (`has_episodes`).
+- `Movies` (last): everything not matched by the first two filters.
+
+These are naming heuristics, not an authoritative genre lookup. An anime
+release without recognisable markers may land in TV or Movies; add a title
+rule when needed. Movies is a fallback, so unrelated non-series media can also
+appear there. File contents are not moved or downloaded to make these folders.
+The original `all` aggregate view is retained. In Infuse, favourite/index the
+three category folders rather than the whole root plus `all`, to avoid duplicate
+library scans.
 
 **AllDebrid requires Zurg's sponsor-only nightly**, currently
 `ghcr.io/debridmediamanager/zurg:latest`. The public stable v1.0.0 image only

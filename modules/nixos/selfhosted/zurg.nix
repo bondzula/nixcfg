@@ -13,12 +13,42 @@ let
     serve_strm_files = false;
     save_strm_files = false;
     rclone_enabled = false;
-    auto_analyze_new_torrents = false;
-    # An index service should not alter the AllDebrid account's torrents.
-    enable_repair = false;
+    # Analysis reads media metadata; playback still redirects to AllDebrid.
+    auto_analyze_new_torrents = true;
+    enable_repair = true;
+    repair_every_mins = 60;
+    restrict_repair_to_cached = true;
     delete_error_torrents = false;
+    log_level = "INFO";
     check_for_changes_every_secs = 60;
-    directories.all.filters = [ { regex = "/.*/"; } ];
+    directories = {
+      # Same group + ascending priority makes these mutually exclusive.
+      Anime = {
+        group = "media";
+        group_order = 10;
+        filters = [
+          # Common anime release groups and CRC32 checksums in file names.
+          { regex = "/\\b(anime|subsplease|erai-raws|horriblesubs|judas|ember|asw)\\b/i"; }
+          { any_file_inside_regex = "/\\b(anime|subsplease|erai-raws|horriblesubs|judas|ember|asw)\\b/i"; }
+          { regex = "/\\[[a-fA-F0-9]{8}\\]/"; }
+          { any_file_inside_regex = "/\\[[a-fA-F0-9]{8}\\]/"; }
+          # Anime films may use normal movie naming without anime markers.
+          { regex = "/^Akira[ ._-]*1988\\b/i"; }
+        ];
+      };
+      TV = {
+        group = "media";
+        group_order = 20;
+        filters = [ { has_episodes = true; } ];
+      };
+      Movies = {
+        group = "media";
+        group_order = 30;
+        filters = [ { regex = "/.*/"; } ];
+      };
+      # Preserve the existing aggregate view for clients already using it.
+      all.filters = [ { regex = "/.*/"; } ];
+    };
   };
   prepareConfig = pkgs.writeScript "zurg-prepare-config" ''
     #!${pkgs.python3}/bin/python3

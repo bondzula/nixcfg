@@ -67,41 +67,19 @@
 
     immich = {
       enable = true;
-      uploadLocation = "/mnt/immich";
+      # The ZFS dataset contains the compose-era uploads directory.
+      uploadLocation = "/mnt/immich/uploads";
+      serverImage = "ghcr.io/immich-app/immich-server:v3.3.0";
+      mlImage = "ghcr.io/immich-app/immich-machine-learning:v3.3.0-openvino";
+      # Match the database and cache images shipped with Immich v3.3.0.
+      redisImage = "docker.io/valkey/valkey:9@sha256:c123e3715db63d06d4ad6964884037aa0d5d4d703939b9929954112889708e1d";
+      dbImage = "ghcr.io/immich-app/postgres:14-vectorchord0.4.3-pgvectors0.2.0@sha256:bcf63357191b76a916ae5eb93464d65c07511da41e3bf7a8416db519b40b1c23";
       dbDataLocation = "/mnt/appdata/immich/db";
       modelCacheDir = "/mnt/appdata/immich/model-cache";
       secretsFile = "/mnt/appdata/immich/secrets.env";
       hwAccel.enable = true;
     };
 
-    gitea = {
-      enable = true;
-      dataDir = "/mnt/gitea";
-      configDir = "/mnt/appdata/gitea/data";
-      dbDir = "/mnt/appdata/gitea/db";
-      secretsFile = "/mnt/appdata/gitea/secrets.env";
-    };
-
-    paperless = {
-      enable = true;
-      dataDir = "/mnt/appdata/paperless/data";
-      documentsDir = "/mnt/paperless";
-      dbDir = "/mnt/appdata/paperless/db";
-      redisDir = "/mnt/appdata/paperless/redis";
-      secretsFile = "/mnt/appdata/paperless/secrets.env";
-    };
-
-    karakeep = {
-      enable = true;
-      dataDir = "/mnt/appdata/karakeep/data";
-      meiliDir = "/mnt/appdata/karakeep/meilisearch";
-      secretsFile = "/mnt/appdata/karakeep/secrets.env";
-    };
-
-    grocy = {
-      enable = true;
-      configDir = "/mnt/appdata/grocy";
-    };
   };
 
   systemd.timers.podman-auto-update.timerConfig.RandomizedDelaySec = lib.mkForce 0;
@@ -146,7 +124,9 @@
   services.samba-wsdd = {
     enable = true;
     openFirewall = true;
-    discovery = true;
+    # Advertise shares on the LAN, ignoring ephemeral Podman interfaces.
+    interface = "eth0";
+    discovery = false;
   };
 
   services.samba = {
@@ -173,7 +153,9 @@
         # For macOS clients
         "vfs objects" = "catia fruit streams_xattr";
         "fruit:metadata" = "stream";
-        "fruit:resource" = "stream";
+        # Resource forks can exceed Linux's xattr size limit; use AppleDouble
+        # sidecars while keeping small Finder metadata in streams_xattr.
+        "fruit:resource" = "file";
       };
 
       Bondzula = {
